@@ -17,6 +17,37 @@
     return negative ? -rounded : rounded;
   }
 
+  function assertNonNegativeInt(value, message) {
+    if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
+      throw new RangeError(message);
+    }
+  }
+
+  function assertSplitCount(n) {
+    if (typeof n !== 'number' || !Number.isInteger(n) || n < 2 || n > 20) {
+      throw new RangeError('Split count must be a whole number from 2 to 20');
+    }
+  }
+
+  function assertRateBlock(block) {
+    if (!block || block.rateBp == null) {
+      if (block && block.enabled) {
+        throw new RangeError('Rate must be a non-negative integer number of basis points');
+      }
+      return;
+    }
+    assertNonNegativeInt(block.rateBp, 'Rate must be a non-negative integer number of basis points');
+  }
+
+  function assertDiscount(billDiscount) {
+    if (!billDiscount) return;
+    if (billDiscount.kind === 'pct') {
+      assertNonNegativeInt(billDiscount.bp, 'Discount must be a non-negative integer number of basis points');
+    } else if (billDiscount.kind === 'rm') {
+      assertNonNegativeInt(billDiscount.sen, 'Discount must be a non-negative integer number of sen');
+    }
+  }
+
   function discountOf(subtotalSen, billDiscount) {
     if (!billDiscount) return 0;
     var amount = 0;
@@ -34,7 +65,17 @@
   function computeBill(input) {
     var subtotalSen = 0;
     var lines = input.lines || [];
-    for (var i = 0; i < lines.length; i++) {
+    var i;
+    var sc = input.settings.serviceCharge;
+    for (i = 0; i < lines.length; i++) {
+      assertNonNegativeInt(lines[i].qty, 'Quantity must be a non-negative integer');
+      assertNonNegativeInt(lines[i].unitPriceSen, 'Price must be a non-negative integer number of sen');
+    }
+    assertDiscount(input.billDiscount);
+    assertRateBlock(sc && sc.dineIn);
+    assertRateBlock(sc && sc.takeaway);
+    assertRateBlock(input.settings.sst);
+    for (i = 0; i < lines.length; i++) {
       if (lines[i].void == null) subtotalSen += lines[i].qty * lines[i].unitPriceSen;
     }
     var discountSen = discountOf(subtotalSen, input.billDiscount);
@@ -59,6 +100,8 @@
   }
 
   function splitEqual(grandTotalSen, n) {
+    assertNonNegativeInt(grandTotalSen, 'Grand total must be a non-negative integer number of sen');
+    assertSplitCount(n);
     var each = (grandTotalSen - (grandTotalSen % n)) / n;
     var remainderSen = grandTotalSen - each * n;
     var amounts = [];
@@ -69,6 +112,10 @@
   function splitByItem(grandTotalSen, bases) {
     var sum = 0;
     var i;
+    assertNonNegativeInt(grandTotalSen, 'Grand total must be a non-negative integer number of sen');
+    for (i = 0; i < bases.length; i++) {
+      assertNonNegativeInt(bases[i], 'Split base must be a non-negative integer number of sen');
+    }
     for (i = 0; i < bases.length; i++) sum += bases[i];
     if (sum === 0) {
       var zeros = [];

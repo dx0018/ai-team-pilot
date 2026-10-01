@@ -23,4 +23,4 @@ npm ci
 npm test
 ```
 
-`npm test` runs `node --test tests/unit/`. Playwright is a devDependency only (`npm run spike:t01`) and is not loaded by the app.
+`npm test` runs the unit tests in `tests/unit/` on Node 20 and Node 22. Playwright is a devDependency only (`npm run spike:t01`) and is not loaded by the app.

@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "test": "node --test tests/unit/",
+    "test": "node tools/run-unit-tests.js",
     "spike:t01": "node tests/spike/t01.spike.js"
   },
   "devDependencies": {

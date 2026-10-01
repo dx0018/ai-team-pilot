@@ -286,6 +286,47 @@ test('splitByItem with Σbase = 0 is 0.00 on every sub-bill', () => {
   assert.deepEqual(calc.splitByItem(0, []), { amounts: [], remainderSen: 0 });
 });
 
+test('R11-blocked inputs throw RangeError', () => {
+  [0, 1, 21, 2.5, -1, NaN, Infinity].forEach((n) => {
+    assert.throws(() => calc.splitEqual(10000, n), RangeError);
+  });
+  assert.throws(() => calc.splitEqual(-1, 2), RangeError);
+  assert.throws(() => calc.splitEqual(10.5, 3), RangeError);
+
+  assert.throws(() => calc.splitByItem(-1, [1000]), RangeError);
+  assert.throws(() => calc.splitByItem(10.5, [1000]), RangeError);
+  assert.throws(() => calc.splitByItem(1000, [-1]), RangeError);
+  assert.throws(() => calc.splitByItem(1000, [1.5]), RangeError);
+  assert.throws(() => calc.splitByItem(1000, [500, 1.2]), RangeError);
+  assert.throws(() => calc.splitByItem(-5, [0, 0]), RangeError);
+
+  assert.throws(() => bill([line(-1)]), RangeError);
+  assert.throws(() => bill([{ qty: 1, unitPriceSen: 1.5, void: null }]), RangeError);
+  assert.throws(() => bill([{ qty: -1, unitPriceSen: 100, void: null }]), RangeError);
+  assert.throws(() => bill([{ qty: 1.5, unitPriceSen: 100, void: null }]), RangeError);
+  assert.throws(() => bill([{ qty: -2, unitPriceSen: 100, void: { reason: 'void' } }]), RangeError);
+  assert.throws(() => bill([line(100)], { settings: settings({ dineInBp: -1 }) }), RangeError);
+  assert.throws(() => bill([line(100)], { settings: settings({ dineInBp: 10.5 }) }), RangeError);
+  assert.throws(() => bill([line(100)], { settings: settings({ takeaway: true, takeawayBp: -1 }), orderType: 'takeaway' }), RangeError);
+  assert.throws(() => bill([line(100)], { settings: settings({ sstBp: -5 }) }), RangeError);
+  assert.throws(() => bill([line(100)], { settings: settings({ sstBp: 6.5 }) }), RangeError);
+  assert.throws(() => bill([line(100)], { billDiscount: { kind: 'pct', bp: -1 } }), RangeError);
+  assert.throws(() => bill([line(100)], { billDiscount: { kind: 'pct', bp: 1.5 } }), RangeError);
+  assert.throws(() => bill([line(100)], { billDiscount: { kind: 'rm', sen: -1 } }), RangeError);
+  assert.throws(() => bill([line(100)], { billDiscount: { kind: 'rm', sen: 1.25 } }), RangeError);
+});
+
+test('zero sen, zero quantity and the split bounds stay valid', () => {
+  const result = bill([{ qty: 0, unitPriceSen: 0, void: null }], {
+    settings: settings({ dineInBp: 0, sstBp: 0 }),
+    billDiscount: { kind: 'pct', bp: 0 }
+  });
+  assert.equal(result.grandTotalSen, 0);
+  assert.deepEqual(calc.splitEqual(0, 2), { amounts: [0, 0], remainderSen: 0 });
+  assert.equal(calc.splitEqual(10000, 20).amounts.length, 20);
+  assert.deepEqual(calc.splitByItem(0, [0]), { amounts: [0], remainderSen: 0 });
+});
+
 test('AC-42 and AC-43 cash change', () => {
   assert.deepEqual(calc.cashChange(2650, 5000), { ok: true, changeSen: 2350 });
   assert.deepEqual(calc.cashChange(2650, 2650), { ok: true, changeSen: 0 });
