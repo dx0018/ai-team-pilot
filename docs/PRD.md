@@ -1,9 +1,9 @@
-# PRD v0.2: Restaurant Mini POS, Malaysia (Phase 1)
+# PRD v0.3: Restaurant Mini POS, Malaysia (Phase 1)
 
 | Item | Value |
 |---|---|
-| Document | PRD v0.2 (supersedes v0.1 at `15607e3`) |
-| Status | **READY_FOR_REVIEW** (approvers: Solution Architect, QA) |
+| Document | PRD v0.3 (supersedes v0.2 at `9e65c78`, which SA and QA approved) |
+| Status | **APPROVED** at v0.2 by SA and QA. v0.3 is an editorial update plus D-04, READY_FOR_REVIEW as a delta. |
 | Source | `/URS.md` v1.0 on `dev`, blob `951a849` (APPROVED). Any later change to that blob is a deviation to re-review. Every requirement here traces to a URS ID. Nothing has been added beyond the URS. |
 | Author | PM |
 | Date | 2026-10-01 |
@@ -116,7 +116,7 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 - **AC-08:** Given a menu with categories (e.g. Rice, Noodles, Beverages, Desserts), when I open the Ordering screen, then items are grouped by category as cards showing image (or a placeholder icon if there's none), name and price as `RM 0.00`.
 
 **US-05 (UR-07):** As the owner, I maintain the menu.
-- **AC-09:** Given the shipped editable menu config file (JSON per URS UR-07), when the app is first loaded, then its categories and items appear.
+- **AC-09 (D-04):** Given the shipped default menu file, when the app is first loaded from disk, then its categories and items appear. The file wraps the menu in a single line of code so that it loads when the app is opened from disk. QA checks this by removing the wrapper: what's left must parse as strict JSON. Settings can export the menu as a plain `.json` file and import it back, and the re-imported menu must match the original exactly.
 - **AC-10:** Given Settings > Menu, when I add an item, edit an item's price, or delete an item and save, then the Ordering screen reflects the change immediately and after a refresh.
 - **AC-11:** Given I enter a price that breaks R11 (negative, non-numeric or more than 2 decimals) or a blank name, when I save, then it's blocked per R10.
 - **AC-12:** Given an item is already on an open or paid order, when I edit its name or price, or delete it from the menu, then that order keeps the name and price captured when the line was added (R13).
@@ -200,7 +200,7 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 **US-21 (UR-32, UR-33, UR-35):** Receipt content.
 - **AC-47:** Given Settings details, then the header shows restaurant name, SSM no., address and phone, plus the SST registration no. only when SST is on.
 - **AC-48:** Given a paid bill, then the body shows the split breakdown (per AC-39) if the bill was split, and also bill no., date/time (MYT), table or takeaway no., each non-voided line with qty, unit price and line amount, every totals line from AC-20, the payment method(s), and cash received and change for Cash payments.
-- **AC-49:** Given the first three bills on 2026-10-01, then they're numbered B-20261001-0001, -0002 and -0003, and numbering restarts at -0001 on the next day. A voided bill keeps its number, and numbers are never reused.
+- **AC-49:** Given the first three bills on 2026-10-01, then they're numbered B-20261001-0001, -0002 and -0003, and numbering restarts at -0001 on the next day. Numbers are never reused. If UR-30 is delivered, a voided bill keeps its number. If it isn't, that clause is N/A.
 
 ### 3.9 End-of-day summary
 
@@ -213,7 +213,7 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 ### 3.10 Settings and data
 
 **US-23 (UR-41):** One Settings screen.
-- **AC-54:** Given Settings, then I can edit restaurant details (name, SSM no., address, phone, SST reg. no.), tables, menu, SC (rate and on/off per order type), SST (rate, on/off, and whether it includes SC), rounding on/off, and the receipt footer. Saved changes apply to new bills.
+- **AC-54:** Given Settings, then I can edit restaurant details (name, SSM no., address, phone, SST reg. no.), tables, menu, SC (rate and on/off per order type), SST (rate, on/off, and whether it includes SC), rounding on/off, and the receipt footer. Saved changes apply to every unpaid order, and paid bills are unchanged (R13).
 
 **US-24 (UR-42):** Data survives refresh.
 - **AC-55 (MTS-10):** Given an open order mid-entry, when I refresh or restart the browser, then the order, table status, settings, menu and all bills are unchanged.
@@ -224,7 +224,7 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 ### 3.11 Look and feel (Must)
 
 - **AC-57 (UD-01, UD-05, UD-10):** Given the build, then screenshots of all 7 screens (Table grid, Ordering, Bill, Split bill, Receipt, EOD summary, Settings) are committed. On each screen, card elements have a corner radius > 0 and a non-none shadow. The owner's visual approval is a separate sign-off (SM-09), not a QA gate.
-- **AC-58 (UD-02):** Given the theme's design tokens, when the primary colour token alone is changed, then every primary-coloured element updates. The default palette is warm (e.g. deep green or terracotta on a cream background) with one accent colour for primary actions.
+- **AC-58 (UD-02):** Given the theme's design tokens, when the primary colour token alone is changed, then every primary-coloured element updates. This is the QA-tested part. Whether the default palette is warm (e.g. deep green or terracotta on a cream background, with one accent colour) is judged by the owner under SM-09, not by QA.
 - **AC-59 (UD-03):** Given the bundled web font (which must support Chinese, per UD-03), when any screen renders, then the text uses it with no external font request. The bundled font covers Latin plus a common-Chinese subset, and rarer characters fall back to the system CJK font with no boxes (AC-13) [ASSUMPTION A-26]. The Grand Total (Bill screen) and the running total (Ordering screen) use the largest font size on their screens.
 - **AC-60 (UD-04):** Given a 1280×800 landscape viewport (representing a 10–11 inch tablet) and a 1366×768 laptop viewport, then every Must screen works without horizontal scrolling, and every tappable control is at least 44×44 px [ASSUMPTION A-21].
 
@@ -313,7 +313,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | [ASSUMPTION A-08] | SC and SST are each rounded to the sen with half-up rounding before summing. | 1-sen differences against the accountant's method. Low impact, but it needs confirming. |
 | [ASSUMPTION A-09] | Tables with open orders can't be removed in Settings. | Without this block, open orders could be orphaned. |
 | [ASSUMPTION A-10] | Takeaway numbers (TA-xxx) restart daily, like bill numbers. | If they should run continuously, it's a minor rule change. |
-| [ASSUMPTION A-11] | Menu validation: price ≥ 0 and name required. | Minor. |
+| [ASSUMPTION A-11] | Superseded by R11 for prices and AC-11 for blank names. | n/a |
 | [ASSUMPTION A-12] | Replaced by R13: name and price are snapshotted when a line is added, and rates apply live until payment, then freeze. | If the owner wants rate changes to skip already-open orders, R13 changes from live to opened-at. |
 | [ASSUMPTION A-13] | There's no kitchen send step in Phase 1. The commit point is entering Bill Requested (R12). | If the owner wants lines committed earlier, e.g. once the kitchen has them, uncommitted removals would go unaudited. |
 | [ASSUMPTION A-14] | Line notes print on the customer receipt. There's no kitchen ticket because the kitchen display is out of scope. | If notes shouldn't appear on the customer receipt, hiding them is a minor change. |
@@ -346,15 +346,16 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 
 ## 6. Open items for review
 
-- **SA:** Please confirm that R1–R9 and A-16 can be designed against without guessing, or raise an issue. I'll answer it or escalate it to the owner.
-- **QA:** Please confirm that every AC from AC-01 to AC-66 can be tested, and that the mapping from MTS to ACs is complete.
+- **SA:** Please confirm that R1–R13 and A-16 can be designed against without guessing, or raise an issue. I'll answer it or escalate it to the owner. Approved at v0.2.
+- **QA:** Please confirm that every Must AC can be tested (AC-01 to AC-66b plus AC-07a, AC-32a, AC-81 and AC-82, 71 in total) and that the mapping from MTS to ACs is complete. Approved at v0.2.
 
 ## 7. Change log
 
 | Version | Commit | Changes |
 |---|---|---|
 | v0.1 | `15607e3` | First draft. |
-| v0.2 | this commit | **SA review items:**<br>1. Added R12 for the order and line lifecycle, and rewrote AC-15 and AC-45.<br>2. Added AC-07a for the takeaway flow.<br>3. Added R13 for snapshots and live settings, and rewrote AC-12, AC-23 and AC-28.<br>4. Made bill-level discount Must (D-01) and added AC-32a.<br>5. Rewrote AC-34, AC-36, AC-38, AC-39 and AC-41 for the split rules.<br>6. Rewrote AC-52 (D-02).<br>7. Added the font subset to AC-59 (A-26).<br>8. Clarified that R5 uses the rounded SC.<br>**QA review items:**<br>1. Added W5 and the no-empty-sub-bill rule.<br>2. Added the 8-row rounding table to AC-29.<br>3. Defined R10 for blocked actions.<br>4. Added R11 for input validation.<br>5. Added AC-81 for duplicate submit.<br>6. Added AC-82 for the single-tab guard (D-03).<br>7. Rewrote AC-57 and AC-59, and split AC-66 into AC-66a and AC-66b.<br>8. Defined the AC-51 breakdowns to add up to net sales.<br>Also used QA's AC-63 method, and logged A-25 to A-28. |
+| v0.2 | `9e65c78` | **SA review items:**<br>1. Added R12 for the order and line lifecycle, and rewrote AC-15 and AC-45.<br>2. Added AC-07a for the takeaway flow.<br>3. Added R13 for snapshots and live settings, and rewrote AC-12, AC-23 and AC-28.<br>4. Made bill-level discount Must (D-01) and added AC-32a.<br>5. Rewrote AC-34, AC-36, AC-38, AC-39 and AC-41 for the split rules.<br>6. Rewrote AC-52 (D-02).<br>7. Added the font subset to AC-59 (A-26).<br>8. Clarified that R5 uses the rounded SC.<br>**QA review items:**<br>1. Added W5 and the no-empty-sub-bill rule.<br>2. Added the 8-row rounding table to AC-29.<br>3. Defined R10 for blocked actions.<br>4. Added R11 for input validation.<br>5. Added AC-81 for duplicate submit.<br>6. Added AC-82 for the single-tab guard (D-03).<br>7. Rewrote AC-57 and AC-59, and split AC-66 into AC-66a and AC-66b.<br>8. Defined the AC-51 breakdowns to add up to net sales.<br>Also used QA's AC-63 method, and logged A-25 to A-28. |
+| v0.3 | this commit | Editorial fixes from the SA and QA v0.2 approvals:<br>- AC-54 now matches R13.<br>- A-11 is marked superseded.<br>- §6 has the correct AC range.<br>- AC-58's palette clause moves to SM-09.<br>- AC-49 marks the voided-bill clause N/A when UR-30 isn't delivered.<br>- AC-09 is reworded for D-04.<br>No other requirement changed. |
 
 ## 8. Decision log (scope-affecting, not silent)
 
@@ -363,3 +364,4 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | D-01 | Bill-level discount (part of UR-16) moves from Should to Must. Item-level discount stays Should. | MTS-07 is mandatory (URS §8) and can't be run without a discount. | Listed in the Final Delivery Package for confirmation. |
 | D-02 | The UR-38 voided-bills list is Must, but stays empty ("None") unless UR-30 is delivered. | UR-38 (Must) depends on UR-30 (Should). This keeps both priorities as the URS set them. | Listed in the Final Delivery Package. |
 | D-03 | Add a single-tab guard (AC-82). | It protects UR-35 bill numbering and adds no user feature. Requested by QA, with SA confirming it's cheap. | Listed in the Final Delivery Package. |
+| D-04 | The default menu ships as strict JSON inside a single line of code, rather than a bare `.json` file. Plain `.json` import and export happen in Settings (AC-09). | Browsers block reading a local `.json` file when the app is opened from disk, and the URS requires opening `index.html` with no installation (NF-06). Raised by SA as AD-04, and QA accepts it because it's testable. | Yes, because it deviates from the UR-07 wording "config file (JSON)". Listed in the Final Delivery Package. |
