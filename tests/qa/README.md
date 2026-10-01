@@ -28,7 +28,7 @@ The generator is a mod-2^32 LCG (`state = 1664525 * state + 1013904223`). Orders
 - `splitEqual(grandTotalSen, n)`
 - `splitByItem(grandTotalSen, bases)`
 
-If `js/calc.js` is missing, cannot be loaded, or does not export those three functions, the four comparison tests are **skipped** with a message and the reference self-check still runs. A skip is not a pass of the implementation.
+If `js/calc.js` is missing, cannot be loaded, or does not export those three functions, the comparison tests are **skipped** with a message and the reference self-check still runs. That includes the R11 `RangeError` checks. A skip is not a pass of the implementation.
 
 ## Counts
 
@@ -70,13 +70,21 @@ Invariants checked on every generated split: parts ≥ 0, remainder sen sit enti
 
 **Shared items.** AC-36 says each non-voided line goes whole to exactly one sub-bill, and a line with qty > 1 cannot be divided. By-item cases do not split a line across people.
 
-## Ambiguities (left as `test.todo`)
+## Closed rulings (2026-10-01)
 
-1. **Item-level discount (R3, AC-71, AC-38 "after item-level discount").** The PRD says a percent or RM item discount applies before the bill-level discount, and that a by-item base is the line sum after that discount. It does not give the line field, whether each line is half-up rounded on its own, whether a fixed item discount is capped at that line, or whether the bill-level percentage then applies to the original subtotal or to what remains. There is no worked number. §3 `computeBill` has no item-discount argument. Bill-level discount is tested. Item-level discount is not.
+No `test.todo` entries remain.
 
-2. **`splitEqual` outside N = 2..20 (AC-34, R11).** Anything else is blocked before allocation. The function is not given a result for `n < 2`, a non-integer `n`, or `n > 20`.
+**Item-level discount.** Out of scope for SM-03: AC-71 item-level discount is Should, not in this build (PM ruling 2026-10-01). The oracle applies bill-level discount only.
 
-3. **Negative money (R11, R9).** Negative unit prices, rates, discounts and grand totals are invalid and blocked before calculation. No calc result is specified, so the oracle does not invent one.
+**Inputs R11 blocks.** PM: R11 blocks at input, no calc value specified. SA: `splitEqual`, `splitByItem` and `computeBill` throw `RangeError` (2026-10-01).
+
+The comparison suite asserts `assert.throws(fn, RangeError)` and no calculated amounts, for:
+
+- `splitEqual` with `n` of 0, 1, 21, 2.5, -2, and NaN
+- `splitByItem` with a negative base
+- `computeBill` with a negative price, a negative quantity, a negative service-charge rate, and a negative RM discount, each built from an otherwise valid dine-in fixture
+
+These checks skip with the other comparison tests when `js/calc.js` or the §3 exports are missing. They are not todos, and they are not weakened when the implementation does not throw yet.
 
 ## Readings fixed by a worked example
 

@@ -102,7 +102,7 @@ function referenceComputeBill(input) {
   // as in R6 (AC-32a: 1.235 → 1.24). An RM amount is already sen.
   // The discount is then capped at Subtotal, and Base = Subtotal − Discount.
   // AC-32a subtracts the rounded discount (12.35 − 1.24 = 11.11).
-  // Item-level discounts are not applied; see the AC-71 todo.
+  // Out of scope for SM-03: AC-71 item-level discount is Should, not in this build (PM ruling 2026-10-01).
   let discount = 0n;
   if (billDiscount && billDiscount.kind === 'pct') {
     if (billDiscount.bp < 0) {
@@ -1202,16 +1202,7 @@ describe('SM-03 reference self-check', () => {
     assert.equal(first, second);
   });
 
-  // PRD gaps. These are not guessed from an implementation.
-  test.todo(
-    'AC-71/R3 item-level discount: the PRD says item discounts (percent or RM) apply before the bill-level discount and that AC-38 base_i is the line sum after them, but it gives no line field, no per-line cap, no rule for whether each line is half-up rounded on its own, and no worked number. It also does not say whether a following bill-level percentage applies to the original subtotal or to the amount left after item discounts. §3 computeBill has no item-discount argument.',
-  );
-  test.todo(
-    'AC-34/R11: a split count outside the whole numbers 2..20 is blocked before allocation. splitEqual is not given a result for n < 2, a non-integer n, or n > 20.',
-  );
-  test.todo(
-    'R11/R9: negative unit prices, negative rates, a negative grand total, and a negative discount are invalid input and are blocked before calculation. No calc result is specified for them.',
-  );
+  // Out of scope for SM-03: AC-71 item-level discount is Should, not in this build (PM ruling 2026-10-01).
 });
 
 const comparison = { skip: SKIP_REASON || false };
@@ -1271,5 +1262,41 @@ describe('SM-03 implementation comparison', () => {
       assert.deepEqual(actual, ref, message);
       assertItemSpec(entry.grand, entry.bases, actual, message);
     });
+  });
+
+  // PM: R11 blocks at input, no calc value specified; SA: functions throw RangeError (2026-10-01).
+  for (const n of [0, 1, 21, 2.5, -2, Number.NaN]) {
+    const label = Number.isNaN(n) ? 'NaN' : String(n);
+    test(`R11 splitEqual throws RangeError for n = ${label}`, comparison, () => {
+      assert.throws(() => impl.splitEqual(10000, n), RangeError);
+    });
+  }
+
+  test('R11 splitByItem throws RangeError for a negative base', comparison, () => {
+    assert.throws(() => impl.splitByItem(10000, [1000, -1]), RangeError);
+  });
+
+  test('R11 computeBill throws RangeError for a negative price', comparison, () => {
+    const input = billInput([line(-100)]);
+    assert.throws(() => impl.computeBill(input), RangeError);
+  });
+
+  test('R11 computeBill throws RangeError for a negative quantity', comparison, () => {
+    const input = billInput([line(1000, -1)]);
+    assert.throws(() => impl.computeBill(input), RangeError);
+  });
+
+  test('R11 computeBill throws RangeError for a negative rate', comparison, () => {
+    const input = billInput([line(1000)], {
+      settings: baseSettings({ dineInBp: -1 }),
+    });
+    assert.throws(() => impl.computeBill(input), RangeError);
+  });
+
+  test('R11 computeBill throws RangeError for a negative discount', comparison, () => {
+    const input = billInput([line(1000)], {
+      billDiscount: { kind: 'rm', sen: -1 },
+    });
+    assert.throws(() => impl.computeBill(input), RangeError);
   });
 });
