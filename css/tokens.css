@@ -5,4 +5,8 @@
   --color-text: #1c1c1c;
   --space: 16px;
   --radius: 8px;
+  --shadow-card: 0 2px 8px rgba(28, 28, 28, 0.16);
+  --font-size-body: 1rem;
+  --font-size-title: 1.5rem;
+  --font-size-total: 2rem;
 }

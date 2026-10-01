@@ -1,3 +1,6 @@
 .screen { padding: var(--space); }
 
-.screen h1 { margin: 0 0 var(--space); }
+.screen h1 {
+  margin: 0 0 var(--space);
+  font-size: var(--font-size-title);
+}

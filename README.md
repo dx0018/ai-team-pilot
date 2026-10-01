@@ -29,4 +29,14 @@ npm ci
 npm test
 ```
 
-`npm test` runs `tests/unit/*.test.js` and `tests/e2e/*.test.js` on Node 20 and Node 22. The T-04 store checks launch headless Chrome through Playwright (`node tests/e2e/t04.store.test.js` runs that file alone). Playwright is a devDependency only and is not loaded by the app.
+`npm test` runs `tests/unit/*.test.js` and `tests/e2e/*.test.js` on Node 20 and Node 22. Browser checks launch headless Chrome through Playwright (`node tests/e2e/t04.store.test.js`, `node tests/e2e/t06.theme.test.js`). Playwright is a devDependency only and is not loaded by the app.
+
+## Font subset
+
+The app uses the committed files `fonts/NotoSansSC-subset-400.woff2` and `fonts/NotoSansSC-subset-700.woff2` (SIL OFL, `fonts/OFL.txt`). Regenerating them needs `pyftsubset` from fonttools and the Noto Sans SC Regular and Bold source fonts. The app does not run that tool and does not download fonts.
+
+```bash
+tools/subset-font.sh NotoSansSC-Regular.otf NotoSansSC-Bold.otf
+```
+
+`tools/subset-text.txt` is Basic Latin, the minus sign U+2212, and the 3,500 Level-1 characters of the Table of General Standard Chinese Characters.

@@ -1,3 +1,54 @@
+.card {
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  background: #fff;
+  padding: var(--space);
+}
+
+button,
+.btn {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 700;
+}
+
+.btn-primary,
+.text-primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.text-primary {
+  background: transparent;
+  color: var(--color-primary);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: var(--radius);
+  font-weight: 700;
+}
+
+.status-empty { background: #e6e1d6; color: var(--color-text); }
+.status-ordering { background: var(--color-accent); color: #fff; }
+.status-bill { background: var(--color-primary); color: #fff; }
+.status-paid { background: #24537a; color: #fff; }
+
+.grand-total,
+.running-total {
+  margin: 0;
+  font-size: var(--font-size-total);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
 .table-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
