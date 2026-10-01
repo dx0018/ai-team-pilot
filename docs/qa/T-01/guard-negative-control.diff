@@ -1,0 +1,4 @@
+50c50
+<   <script src="spike.js"></script>
+---
+>   <img src="https://example.com/qa-negative-control.png" alt=""><script src="spike.js"></script>

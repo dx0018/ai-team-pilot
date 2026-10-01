@@ -1,0 +1,7 @@
+
+> spike:t01
+> node tests/spike/t01.spike.js
+
+{"browser":"chrome","channel":"chrome","version":"154.0.8037.57","product":"Chrome/154.0.8037.57","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36","isSecureContext":true,"isSecureContextByPage":{"write":true,"read":true,"holder":true,"second":true},"checks":{"classicScript":{"pass":true},"indexedDB":{"pass":true,"token":"t01-muphl1vb-0hoj6bpq","writtenAt":"2026-10-01T12:04:31.094Z"},"webLocks":{"pass":true,"holderOutcome":"acquired","secondOutcome":"null","holderLockIsNull":false,"secondLockIsNull":true,"isSecureContext":true},"font":{"pass":true,"family":"T01 Noto Sans SC","sample":"Nasi Lemak 椰浆饭 谢谢"}},"offendingRequests":[],"pass":true}
+{"browser":"msedge","channel":"msedge","version":"154.0.4258.48","product":"Edg/154.0.4258.48","userAgent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0","isSecureContext":true,"isSecureContextByPage":{"write":true,"read":true,"holder":true,"second":true},"checks":{"classicScript":{"pass":true},"indexedDB":{"pass":true,"token":"t01-muphl3el-mrdcfenm","writtenAt":"2026-10-01T12:04:32.940Z"},"webLocks":{"pass":true,"holderOutcome":"acquired","secondOutcome":"null","holderLockIsNull":false,"secondLockIsNull":true,"isSecureContext":true},"font":{"pass":true,"family":"T01 Noto Sans SC","sample":"Nasi Lemak 椰浆饭 谢谢"}},"offendingRequests":[],"pass":true}
+exit=0
