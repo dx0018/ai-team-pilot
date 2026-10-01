@@ -2,7 +2,18 @@
 
 Self-contained check that classic scripts, IndexedDB, Web Locks, and a local `@font-face` woff2 work from `file://`. Open `index.html` directly. No build step and no network.
 
-Results are recorded by QA in `docs/spikes/T-01.md` (decision D-08). Commands are in that file.
+Results are recorded by QA in `docs/spikes/T-01.md` (decision D-08). From the repo root, install each browser channel on its own. A combined `npx playwright install chrome msedge` can skip Edge when Chrome is already installed and still exit 0.
+
+```bash
+npm ci
+npx playwright install chrome
+node tools/check-browsers.js chrome
+npx playwright install msedge
+node tools/check-browsers.js msedge
+npm run spike:t01
+```
+
+`node tools/check-browsers.js chrome` and `node tools/check-browsers.js msedge` each launch that channel and print `browser.version()`. Either command exits 1 if that browser is missing. `npm run check:browsers` checks both. The run commands are also in `docs/spikes/T-01.md`.
 
 ## Font subset
 

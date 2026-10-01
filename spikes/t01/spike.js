@@ -14,16 +14,38 @@
 
   window.SPIKE_CLASSIC_SCRIPT = true;
 
+  // Captured while this classic <script src> is still the current script.
+  // document.currentScript is null for type=module and after the script returns.
+  var classicAtLoad = (function () {
+    var script = document.currentScript;
+    var type = script && typeof script.type === 'string' ? script.type.toLowerCase() : '';
+    return {
+      globalSet: window.SPIKE_CLASSIC_SCRIPT === true,
+      nonModule: !!(script && script.src && type !== 'module'),
+      src: script && script.src ? script.src : ''
+    };
+  })();
+
   var params = new URLSearchParams(location.search);
   var phase = params.get('phase') || 'write';
   var role = params.get('role') || 'holder';
   var token = params.get('token') || DEFAULT_TOKEN;
 
   function checkClassicScript() {
-    return {
-      pass: true,
-      detail: 'spike.js ran from <script src> without type=module'
-    };
+    var globalOk = classicAtLoad.globalSet && window.SPIKE_CLASSIC_SCRIPT === true;
+    var beforeDone = window.SPIKE_DONE !== true;
+    var pass = globalOk && classicAtLoad.nonModule && beforeDone;
+    var detail;
+    if (pass) {
+      detail = 'SPIKE_CLASSIC_SCRIPT was set by a classic script src (' + classicAtLoad.src + '); currentScript was non-module; checked before SPIKE_DONE';
+    } else if (!globalOk) {
+      detail = 'classic script global SPIKE_CLASSIC_SCRIPT is missing';
+    } else if (!classicAtLoad.nonModule) {
+      detail = 'document.currentScript was missing or type=module';
+    } else {
+      detail = 'classic script check ran after SPIKE_DONE';
+    }
+    return { pass: pass, detail: detail };
   }
 
   function openDb() {

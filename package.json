@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "test": "node tools/run-tests.js",
+    "check:browsers": "node tools/check-browsers.js",
     "spike:t01": "node tests/spike/t01.spike.js"
   },
   "devDependencies": {
