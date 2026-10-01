@@ -1,9 +1,9 @@
-# PRD v0.4: Restaurant Mini POS, Malaysia (Phase 1)
+# PRD v0.5: Restaurant Mini POS, Malaysia (Phase 1)
 
 | Item | Value |
 |---|---|
-| Document | PRD v0.4 (supersedes v0.3 at `15070cc`; v0.2 at `9e65c78` was approved by SA and QA) |
-| Status | **READY_FOR_REVIEW** as a delta on the approved v0.2. v0.4 adds R12 exits (D-05), AC-83 and AC-84, and R14 EOD dating. |
+| Document | PRD v0.5 (supersedes v0.4 at `1573027`, which SA and QA approved) |
+| Status | **APPROVED** at v0.4 (74 Must ACs). v0.5 is an editorial change that clarifies AC-83. |
 | Source | `/URS.md` v1.0 on `dev`, blob `951a849` (APPROVED). Any later change to that blob is a deviation to re-review. Every requirement here traces to a URS ID. Nothing has been added beyond the URS. |
 | Author | PM |
 | Date | 2026-10-01 |
@@ -240,7 +240,7 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 - **AC-65 (NF-06):** Given a fresh copy, when the README steps are followed, then the app opens with no installation (opening `index.html` or using a static server, per URS NF-06).
 - **AC-66a (NF-07):** Given a dependency check is executed, then no declared library is unused.
 - **AC-66b (NF-07, review only):** Given a code review, then the file structure is clear and readable. This is a code-review verdict, labelled as such, not an executed test.
-- **AC-83 (R12, empty order):** Given I open Table 5 and add no lines, or I remove every uncommitted line with −, when I leave the Ordering screen, then Table 5 shows Empty, no bill exists, and the next bill number is unchanged.
+- **AC-83 (R12, empty order):** Given I open Table 5 and add no lines, or I remove every uncommitted line with −, when I leave the Ordering screen, then Table 5 shows Empty, no bill exists, and the next bill number is unchanged. Reloading the app counts as leaving the Ordering screen. Every order with no lines is deleted, and the app opens on the table map.
 - **AC-84 (R12, all lines voided, D-05):** Given an order on Table 5 whose two lines are both voided, when I tap Close without bill, then Table 5 shows Empty, no bill or bill number is created, payment is still blocked per AC-33, and both voided lines appear in that day's EOD voided-items list.
 - **AC-85 (R14, past midnight):** Given an order opened at 23:50 on 2026-10-01 and paid at 00:10 on 2026-10-02, then its bill is numbered B-20261002-xxxx and is counted in the EOD for 2026-10-02 only. A line on it voided at 23:55 appears in the 2026-10-01 voided-items list.
 - **AC-82 (single tab, D-03):** Given the app is open in one tab, when it's opened in a second tab of the same browser, then the second tab shows a blocking "already open in another tab" notice and can't create or change any order or bill.
@@ -363,6 +363,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | v0.2 | `9e65c78` | **SA review items:**<br>1. Added R12 for the order and line lifecycle, and rewrote AC-15 and AC-45.<br>2. Added AC-07a for the takeaway flow.<br>3. Added R13 for snapshots and live settings, and rewrote AC-12, AC-23 and AC-28.<br>4. Made bill-level discount Must (D-01) and added AC-32a.<br>5. Rewrote AC-34, AC-36, AC-38, AC-39 and AC-41 for the split rules.<br>6. Rewrote AC-52 (D-02).<br>7. Added the font subset to AC-59 (A-26).<br>8. Clarified that R5 uses the rounded SC.<br>**QA review items:**<br>1. Added W5 and the no-empty-sub-bill rule.<br>2. Added the 8-row rounding table to AC-29.<br>3. Defined R10 for blocked actions.<br>4. Added R11 for input validation.<br>5. Added AC-81 for duplicate submit.<br>6. Added AC-82 for the single-tab guard (D-03).<br>7. Rewrote AC-57 and AC-59, and split AC-66 into AC-66a and AC-66b.<br>8. Defined the AC-51 breakdowns to add up to net sales.<br>Also used QA's AC-63 method, and logged A-25 to A-28. |
 | v0.3 | this commit | Editorial fixes from the SA and QA v0.2 approvals:<br>- AC-54 now matches R13.<br>- A-11 is marked superseded.<br>- §6 has the correct AC range.<br>- AC-58's palette clause moves to SM-09.<br>- AC-49 marks the voided-bill clause N/A when UR-30 isn't delivered.<br>- AC-09 is reworded for D-04.<br>No other requirement changed. |
 | v0.4 | this commit | IE review of Architecture v1.1:<br>- R12 gains two exits, AC-83 for an empty order and AC-84 for an all-voided order (D-05).<br>- Added R14 and AC-85: EOD counts a bill on its payment date and a void on its void date.<br>Must ACs go from 71 to 74. |
+| v0.5 | this commit | Editorial: AC-83 now says a reload counts as leaving the Ordering screen. Matches Architecture v1.3 at `18560a0`. No requirement changed. |
 
 ## 8. Decision log (scope-affecting, not silent)
 
