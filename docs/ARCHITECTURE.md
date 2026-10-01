@@ -1,8 +1,8 @@
-# Architecture v1.3: Restaurant Mini POS, Malaysia (Phase 1)
+# Architecture v1.4: Restaurant Mini POS, Malaysia (Phase 1)
 
 | Item | Value |
 |---|---|
-| Document | Architecture v1.3 (v1 at `da3a194`, v1.1 at `85255fa`, v1.2 at `039d05a`) |
+| Document | Architecture v1.4 (v1 at `da3a194`, v1.1 at `85255fa`, v1.2 at `039d05a`, v1.3 at `18560a0`) |
 | Status | **READY_FOR_REVIEW** (reviewers: IE for buildability, QA for testability) |
 | Input | PRD v0.4 at `1573027` (74 Must ACs; v0.2 APPROVED by SA and QA, v0.3 editorial, v0.4 adds R14, AC-83, AC-84, AC-85), traced to URS blob `951a849` |
 | Author | SA |
@@ -126,7 +126,8 @@ There is no network API. These are the module interfaces IE builds and QA tests 
 ### `money.js`
 - `parseMoney(text) → { ok, sen } | { ok: false, error }` (string parsing, no float; rejects more than 2 decimals, negatives, non-numeric)
 - `formatRM(sen) → 'RM 12.34'`; `formatSigned(sen) → '+0.02' | '−0.02' | '0.00'`
-- `parseRate(text) → { ok, bp } | error` (0–100, at most 2 decimals)
+- `parseRate(text) → { ok: true, bp } | { ok: false, error }` (0–100, at most 2 decimals; same failure shape as `parseMoney`, AD-17)
+- Cash received is parsed with `parseMoney`; there is no separate `validateCash` (AD-17)
 
 ### `calc.js`
 - `halfUpDiv(numerator, denominator)` integer half-up division (non-negative inputs)
@@ -135,6 +136,9 @@ There is no network API. These are the module interfaces IE builds and QA tests 
 - `splitEqual(grandTotalSen, n) → { amounts[], remainderSen }`
 - `splitByItem(grandTotalSen, bases[]) → { amounts[], remainderSen }` (floor of `grand × base_i / Σbase`, remainder to index 0; all zero when Σbase = 0)
 - `cashChange(dueSen, receivedSen) → { ok, changeSen } | { ok: false, reason }`
+- **Invalid input (AD-18):** `computeBill`, `splitEqual` and `splitByItem` throw `RangeError` on any input R11 blocks (split count not an integer 2–20, negative price, quantity, rate or discount, negative or non-integer sen). `validate.js` blocks these first, so the app never reaches the throw; the throw makes a bug fail loudly instead of returning `NaN`. Tests assert the throw, never a value.
+- `computeBill` applies the bill-level discount only. Item-level discount (AC-71, R3) is Should and out of this build (PM ruling), so `lines` carry no discount field.
+- `splitByItem` with Σbase = 0 returns all-zero `amounts` **and** `remainderSen: 0` (AD-17).
 
 ### `validate.js` (R11)
 - `validateTables(tables)`, `validateMenuItem(item)`, `validateRates(settings)`, `validateSplitN(n)`, `validateDiscount(d, subtotalSen)` → `{ ok } | { ok: false, field, message }`
@@ -180,7 +184,7 @@ images/ (optional menu images)
 tests/  unit/*.test.js     (node:test, zero dependencies)
         e2e/*.spec.js      (Playwright, dev-only)
         fixtures/seed-200-items-500-bills.json
-tools/  subset-font.sh  make-fixture.js   (dev-only)
+tools/  subset-font.sh  make-fixture.js  run-tests.js   (dev-only)
 README.md  package.json (devDependencies only)
 ```
 
@@ -207,6 +211,10 @@ All app scripts are classic `<script>` tags in dependency order. Each pure modul
 | AD-13 | One receipt layout: a 72 mm content column (80 mm paper's printable width) via `@media print`, centred on the page | Separate 80 mm and A4 templates | AC-46 with one stylesheet; on A4 it prints as a neat centred column. |
 | AD-15 | EOD reads by payment date and void date through two indexes (`billDate`, multiEntry `voidDates`) | One index on the opening date | R14 / AC-85: an order opened 23:50 and paid 00:10 counts on the new date, a line voided 23:55 on the old one. IndexedDB skips unpaid orders in `billDate` automatically. |
 | AD-16 | Zero-line orders are deleted on leaving Ordering; all-voided orders end in `closed_no_bill` | Keep empty orders; add a generic Cancel order | AC-83 and AC-84 exactly, with no new scope. Keeping `closed_no_bill` records (not deleting them) preserves their voids for EOD. |
+| AD-17 | IE's T-03 interface clarifications accepted: `parseRate` failure is `{ ok: false, error }`; cash received goes through `parseMoney`; `splitByItem` returns `remainderSen: 0` when Σbase is 0; `computeBill` has no item-level discount | Leave them implicit | §3 was ambiguous on each; each choice is the simplest consistent one and changes no AC. Logged so they aren't silent deviations (RR). |
+| AD-18 | Pure calc functions throw `RangeError` on R11-blocked input | Return `{ ok: false }`; return `NaN` | Input is validated before calc (R11, AC-34); a throw can only mean a programming bug, and it fails loudly in tests. PM confirmed the PRD sets no value for these inputs. |
+| AD-19 | `npm test` runs a small dependency-free script (`tools/run-tests.js`) that finds `tests/**/*.test.js` and passes the files to `node --test` | `node --test tests/unit/` | Directory arguments to `node --test` behave differently on Node 20 and 22; the script behaves the same on Linux, macOS and Windows. Still `node:test`, still zero dependencies (AD-10). |
+| AD-20 | Rollback is by keeping the previous release folder; the app never migrates data downwards | Down-migrations | Phase 1 has only schema v1, so going back a build never meets newer data. From any future v2, an older build that finds a newer `schemaVersion` shows the blocking error (§5) and does not touch the data; recovery is to reopen the newer build. |
 | AD-14 | Render with template strings and an `escapeHtml()` helper on every user-entered string | Unescaped `innerHTML`; a templating library | Item names, notes and reasons can't break the layout or inject markup; no dependency. |
 
 ## 5. Security, failure modes, observability
@@ -232,7 +240,7 @@ All app scripts are classic `<script>` tags in dependency order. Each pure modul
 | Removing a table with an open order (AC-05) | `validateTables` refuses it per R10. |
 | Menu edits (R10, R13) | Deleting a category that still has items is blocked with a message; deleting an item is allowed, and open orders keep their snapshotted lines. |
 | Browser storage cleared or evicted (RK-02) | The app calls `navigator.storage.persist()` on first run to reduce eviction risk; the README warns about clearing browser data. Backup (UR-43) is Should. |
-| Unknown schema version on load | Show a blocking error rather than guess. v1 is the only version. |
+| Unknown schema version on load | Show a blocking error rather than guess, and write nothing. v1 is the only version. This is also the rollback safety net (AD-20). |
 
 ### Observability (what applies)
 - No telemetry (NF-01). Uncaught errors (`window.onerror`, `unhandledrejection`) show a visible error banner with the message, so staff can report it.
@@ -322,4 +330,5 @@ All 74 Must ACs (AC-01 to AC-66b plus AC-07a, AC-32a, AC-81 to AC-85) map to at 
 | v1 | `da3a194` | First design. |
 | v1.1 | `85255fa` | AD-04 tightened to a fixed wrapper around strict JSON (QA condition); T-12 done-criteria add the menu JSON round trip and the `JSON.parse` check; RS-02 updated. |
 | v1.2 | `039d05a` | Against PRD v0.4 `1573027`. IE 1 / R14: `billDate` and multiEntry `voidDates` indexes replace the opening-date index (AD-15, AC-85). IE 2 / AC-83, AC-84: zero-line orders discarded on leaving Ordering, Close without bill sets `closed_no_bill` (AD-16). IE 3–7 recorded (payOrder scope, module guard and Node 20, pyftsubset, menu deletes, `summariseDay` inputs). QA 1–6: QA owns the SM-03 oracle; `failNextWrite`, `payConcurrently` and `payCallCount`; AC-63 marks and one-date fixture; extra `data-testid`s; T-13 done-criteria. RS-08 updated for A-30 and D-08; RS-09 added. |
-| v1.3 | this commit | AC-83: a reload counts as leaving Ordering (PM ruling), so the startup sweep deletes every zero-line order and redirects to `#/tables`. §6: T-02 and T-03 no longer wait for T-01 (IE proposal; neither touches IndexedDB, Web Locks or fonts). T-04 and T-06 still wait for T-01. |
+| v1.3 | `18560a0` | AC-83: a reload counts as leaving Ordering (PM ruling), so the startup sweep deletes every zero-line order and redirects to `#/tables`. §6: T-02 and T-03 no longer wait for T-01 (IE proposal; neither touches IndexedDB, Web Locks or fonts). T-04 and T-06 still wait for T-01. |
+| v1.4 | this commit | AD-17 accepts IE's four T-03 clarifications (`parseRate` failure shape, cash via `parseMoney`, `remainderSen: 0` at Σbase 0, no item-level discount). AD-18: `RangeError` on R11-blocked input to calc. AD-19: `tools/run-tests.js` for `npm test` across Node 20/22. AD-20 and §5: rollback by keeping the previous release folder, no down-migration, blocking error on a newer schema. §3 updated to match. |
