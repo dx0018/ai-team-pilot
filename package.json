@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "spike:t01": "node tests/spike/t01.spike.js"
+  },
+  "devDependencies": {
+    "playwright": "1.63.0"
+  }
+}
