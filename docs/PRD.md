@@ -1,9 +1,9 @@
-# PRD v0.3: Restaurant Mini POS, Malaysia (Phase 1)
+# PRD v0.4: Restaurant Mini POS, Malaysia (Phase 1)
 
 | Item | Value |
 |---|---|
-| Document | PRD v0.3 (supersedes v0.2 at `9e65c78`, which SA and QA approved) |
-| Status | **APPROVED** at v0.2 by SA and QA. v0.3 is an editorial update plus D-04, READY_FOR_REVIEW as a delta. |
+| Document | PRD v0.4 (supersedes v0.3 at `15070cc`; v0.2 at `9e65c78` was approved by SA and QA) |
+| Status | **READY_FOR_REVIEW** as a delta on the approved v0.2. v0.4 adds R12 exits (D-05), AC-83 and AC-84, and R14 EOD dating. |
 | Source | `/URS.md` v1.0 on `dev`, blob `951a849` (APPROVED). Any later change to that blob is a deviation to re-review. Every requirement here traces to a URS ID. Nothing has been added beyond the URS. |
 | Author | PM |
 | Date | 2026-10-01 |
@@ -63,6 +63,9 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
   - An uncommitted line can be reduced or removed freely with −.
   - Adding any item to a Bill Requested order returns it to Ordering. Previously committed lines stay committed, and the new lines are uncommitted.
   - Payment moves the order to **Paid**.
+  - **Exit with zero lines (AC-83):** an order that has no lines is discarded when the user leaves the Ordering screen. The table returns to Empty, and no bill or bill number is used. A takeaway number used this way is not reissued, and the gap is acceptable.
+  - **Exit with every line voided (AC-84, D-05):** an order with at least one line, where every line is voided, offers a one-tap **Close without bill**. The table returns to Empty, no bill or bill number is created, and the voided lines stay in that date's EOD voided-items list.
+- **R14 EOD dating:** a paid bill belongs to the business date on which it was paid. That's the same date as its bill number (UR-35). A voided line belongs to the business date on which it was voided. The date an order was opened never decides EOD attribution.
 - **R13 Snapshot and live settings:**
   - A line stores the item's name and unit price at the moment it is added. Later menu edits don't change open or paid orders.
   - SC, SST and rounding settings apply live to every unpaid order. They are frozen into the bill at payment.
@@ -237,6 +240,9 @@ Note on the single-tab guard: AC-82 protects bill numbering (UR-35, Must) from c
 - **AC-65 (NF-06):** Given a fresh copy, when the README steps are followed, then the app opens with no installation (opening `index.html` or using a static server, per URS NF-06).
 - **AC-66a (NF-07):** Given a dependency check is executed, then no declared library is unused.
 - **AC-66b (NF-07, review only):** Given a code review, then the file structure is clear and readable. This is a code-review verdict, labelled as such, not an executed test.
+- **AC-83 (R12, empty order):** Given I open Table 5 and add no lines, or I remove every uncommitted line with −, when I leave the Ordering screen, then Table 5 shows Empty, no bill exists, and the next bill number is unchanged.
+- **AC-84 (R12, all lines voided, D-05):** Given an order on Table 5 whose two lines are both voided, when I tap Close without bill, then Table 5 shows Empty, no bill or bill number is created, payment is still blocked per AC-33, and both voided lines appear in that day's EOD voided-items list.
+- **AC-85 (R14, past midnight):** Given an order opened at 23:50 on 2026-10-01 and paid at 00:10 on 2026-10-02, then its bill is numbered B-20261002-xxxx and is counted in the EOD for 2026-10-02 only. A line on it voided at 23:55 appears in the 2026-10-01 voided-items list.
 - **AC-82 (single tab, D-03):** Given the app is open in one tab, when it's opened in a second tab of the same browser, then the second tab shows a blocking "already open in another tab" notice and can't create or change any order or bill.
 
 ### 3.13 Should items (lighter ACs, for completeness)
@@ -288,7 +294,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | ID | Metric | Target | How measured |
 |---|---|---|---|
 | SM-01 | Mandatory Test Scenarios passing with executed evidence | 12 of 12 | QA run log committed on `dev` |
-| SM-02 | Must ACs passing | 100% of Must ACs (AC-01 to AC-66b, plus AC-07a, AC-32a, AC-81 and AC-82) | QA AC checklist with evidence |
+| SM-02 | Must ACs passing | 100% of Must ACs (AC-01 to AC-66b, plus AC-07a, AC-32a and AC-81 to AC-85) | QA AC checklist with evidence |
 | SM-03 | Calculation unit tests | 100% pass, 0 floating-point mismatches across all fixed cases plus ≥1,000 generated cases checked against an independent reference | Automated test output |
 | SM-04 | Split integrity | 0 cases where the sum of sub-bills differs from the Grand Total, across N = 2–20 and every split-by-item test | Unit tests |
 | SM-05 | Screen responsiveness | Every screen and Must action ≤ 300 ms at 200 items and 500 bills | QA timing measurement (AC-63) |
@@ -330,7 +336,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | [ASSUMPTION A-25] | The table count limit is 1–50. The URS says about 10–25 tables. | A restaurant with more than 50 tables would need the limit raised, which is a minor change. |
 | [ASSUMPTION A-26] | The bundled font is a common-Chinese subset (SA estimate 1–2 MB), and rare characters fall back to the system CJK font. | Those rare characters may look slightly different from the rest of the text. That's cosmetic, and there are no missing glyphs. |
 | [ASSUMPTION A-27] | There's no data-retention target in the URS. SA designs storage for at least 5,000 bills. This is a design target, not a new requirement. | Heavy-volume restaurants may need backup and reset sooner (RK-06). |
-| [ASSUMPTION A-28] | Daily rollover for bill numbers, takeaway numbers and EOD dates happens at midnight device time (MYT). | If the restaurant trades past midnight, late bills fall on the next date. |
+| [ASSUMPTION A-28] | Daily rollover for bill numbers, takeaway numbers and EOD dates happens at midnight device time (MYT). | If the restaurant trades past midnight, late bills fall on the next date. Attribution follows R14. |
 
 ### Risks
 
@@ -347,7 +353,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 ## 6. Open items for review
 
 - **SA:** Please confirm that R1–R13 and A-16 can be designed against without guessing, or raise an issue. I'll answer it or escalate it to the owner. Approved at v0.2.
-- **QA:** Please confirm that every Must AC can be tested (AC-01 to AC-66b plus AC-07a, AC-32a, AC-81 and AC-82, 71 in total) and that the mapping from MTS to ACs is complete. Approved at v0.2.
+- **QA:** Please confirm that every Must AC can be tested (AC-01 to AC-66b plus AC-07a, AC-32a and AC-81 to AC-85, 74 in total) and that the mapping from MTS to ACs is complete. Approved at v0.2.
 
 ## 7. Change log
 
@@ -356,6 +362,7 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | v0.1 | `15607e3` | First draft. |
 | v0.2 | `9e65c78` | **SA review items:**<br>1. Added R12 for the order and line lifecycle, and rewrote AC-15 and AC-45.<br>2. Added AC-07a for the takeaway flow.<br>3. Added R13 for snapshots and live settings, and rewrote AC-12, AC-23 and AC-28.<br>4. Made bill-level discount Must (D-01) and added AC-32a.<br>5. Rewrote AC-34, AC-36, AC-38, AC-39 and AC-41 for the split rules.<br>6. Rewrote AC-52 (D-02).<br>7. Added the font subset to AC-59 (A-26).<br>8. Clarified that R5 uses the rounded SC.<br>**QA review items:**<br>1. Added W5 and the no-empty-sub-bill rule.<br>2. Added the 8-row rounding table to AC-29.<br>3. Defined R10 for blocked actions.<br>4. Added R11 for input validation.<br>5. Added AC-81 for duplicate submit.<br>6. Added AC-82 for the single-tab guard (D-03).<br>7. Rewrote AC-57 and AC-59, and split AC-66 into AC-66a and AC-66b.<br>8. Defined the AC-51 breakdowns to add up to net sales.<br>Also used QA's AC-63 method, and logged A-25 to A-28. |
 | v0.3 | this commit | Editorial fixes from the SA and QA v0.2 approvals:<br>- AC-54 now matches R13.<br>- A-11 is marked superseded.<br>- §6 has the correct AC range.<br>- AC-58's palette clause moves to SM-09.<br>- AC-49 marks the voided-bill clause N/A when UR-30 isn't delivered.<br>- AC-09 is reworded for D-04.<br>No other requirement changed. |
+| v0.4 | this commit | IE review of Architecture v1.1:<br>- R12 gains two exits, AC-83 for an empty order and AC-84 for an all-voided order (D-05).<br>- Added R14 and AC-85: EOD counts a bill on its payment date and a void on its void date.<br>Must ACs go from 71 to 74. |
 
 ## 8. Decision log (scope-affecting, not silent)
 
@@ -365,3 +372,4 @@ Mandatory Test Scenarios: MTS-01 maps to AC-24, MTS-02 to AC-25, MTS-03 to AC-27
 | D-02 | The UR-38 voided-bills list is Must, but stays empty ("None") unless UR-30 is delivered. | UR-38 (Must) depends on UR-30 (Should). This keeps both priorities as the URS set them. | Listed in the Final Delivery Package. |
 | D-03 | Add a single-tab guard (AC-82). | It protects UR-35 bill numbering and adds no user feature. Requested by QA, with SA confirming it's cheap. | Listed in the Final Delivery Package. |
 | D-04 | The default menu ships as strict JSON inside a single line of code, rather than a bare `.json` file. Plain `.json` import and export happen in Settings (AC-09). | Browsers block reading a local `.json` file when the app is opened from disk, and the URS requires opening `index.html` with no installation (NF-06). Raised by SA as AD-04, and QA accepts it because it's testable. | Yes, because it deviates from the UR-07 wording "config file (JSON)". Listed in the Final Delivery Package. |
+| D-05 | Add **Close without bill** for an order whose lines are all voided (AC-84). | Without it, the table stays locked for good, because AC-33 blocks payment and only a Paid table can be reset. This fills a gap in the URS lifecycle and adds no new reporting. Raised by IE. | Listed in the Final Delivery Package for confirmation. |
