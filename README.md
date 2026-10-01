@@ -14,6 +14,12 @@ Then open the site that server prints.
 
 Do not mix the two. `file://` and a static server are different browser origins, so each has its own data (RS-03). Use one method and stay with it. The intended method is double-clicking `index.html`.
 
+Orders, the menu and settings are stored in this browser profile (IndexedDB). Clearing site data or the browser profile deletes them. This version has no backup.
+
+On `file://`, Chrome and Edge treat local files as one origin, so another local HTML file opened in the same profile can read this data (RS-07). Use one counter device.
+
+A second tab shows "already open in another tab" and does not open the register. Close the first tab to continue.
+
 ## Tests
 
 Node.js 20 or newer.
@@ -23,4 +29,4 @@ npm ci
 npm test
 ```
 
-`npm test` runs the unit tests in `tests/unit/` on Node 20 and Node 22. Playwright is a devDependency only (`npm run spike:t01`) and is not loaded by the app.
+`npm test` runs `tests/unit/*.test.js` and `tests/e2e/*.test.js` on Node 20 and Node 22. The T-04 store checks launch headless Chrome through Playwright (`node tests/e2e/t04.store.test.js` runs that file alone). Playwright is a devDependency only and is not loaded by the app.

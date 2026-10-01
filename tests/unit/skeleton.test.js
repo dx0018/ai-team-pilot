@@ -9,10 +9,23 @@ test('index.html loads classic scripts and local stylesheets', () => {
   const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
   assert.equal(html.includes('type="module"'), false);
   assert.equal(html.includes('type=\'module\''), false);
-  const routerAt = html.indexOf('src="js/router.js"');
-  const appAt = html.indexOf('src="js/app.js"');
-  assert.ok(routerAt > 0);
-  assert.ok(appAt > routerAt);
+  const order = [
+    'src="config/menu.js"',
+    'src="js/money.js"',
+    'src="js/calc.js"',
+    'src="js/validate.js"',
+    'src="js/clock.js"',
+    'src="js/store.js"',
+    'src="js/tablock.js"',
+    'src="js/router.js"',
+    'src="js/app.js"'
+  ];
+  let previous = -1;
+  order.forEach(function (src) {
+    const at = html.indexOf(src);
+    assert.ok(at > previous, src);
+    previous = at;
+  });
   ['css/tokens.css', 'css/base.css', 'css/components.css', 'css/screens.css', 'css/print.css']
     .forEach(function (href) {
       assert.ok(html.includes('href="' + href + '"'));

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Schema v2 fixture</title>
+</head>
+<body>
+  <script>
+    var req = indexedDB.open('mini-pos', 2);
+    req.onupgradeneeded = function () {
+      var db = req.result;
+      if (!db.objectStoreNames.contains('meta')) db.createObjectStore('meta');
+      if (!db.objectStoreNames.contains('settings')) db.createObjectStore('settings');
+      if (!db.objectStoreNames.contains('menu')) db.createObjectStore('menu');
+      if (!db.objectStoreNames.contains('orders')) {
+        var orders = db.createObjectStore('orders', { keyPath: 'id' });
+        orders.createIndex('state', 'state');
+        orders.createIndex('billDate', 'bill.businessDate');
+        orders.createIndex('voidDates', 'voidDates', { multiEntry: true });
+      }
+    };
+    req.onsuccess = function () {
+      var db = req.result;
+      var tx = db.transaction(['meta', 'orders'], 'readwrite');
+      tx.objectStore('meta').put(2, 'schemaVersion');
+      tx.objectStore('orders').put({
+        id: 'ghost',
+        type: 'dine_in',
+        tableId: 't1',
+        state: 'ordering',
+        closed: false,
+        lines: [],
+        voidDates: [],
+        bill: null
+      });
+      tx.oncomplete = function () {
+        db.close();
+        window.SCHEMA_READY = true;
+      };
+      tx.onerror = function () {
+        window.SCHEMA_ERROR = String(tx.error);
+        window.SCHEMA_READY = true;
+      };
+    };
+    req.onerror = function () {
+      window.SCHEMA_ERROR = String(req.error);
+      window.SCHEMA_READY = true;
+    };
+  </script>
+</body>
+</html>

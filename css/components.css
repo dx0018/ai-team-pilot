@@ -4,3 +4,14 @@
   gap: var(--space);
   min-height: 80px;
 }
+
+[data-testid="error-banner"],
+[data-testid="schema-block"],
+[data-testid="tablock-notice"] {
+  margin: var(--space);
+  padding: var(--space);
+  border: 2px solid #8a1f1f;
+  background: #fff4f4;
+  color: var(--color-text);
+  font-weight: 700;
+}
