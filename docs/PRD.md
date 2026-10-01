@@ -4,7 +4,7 @@
 |---|---|
 | Document | PRD v0.1 |
 | Status | **READY_FOR_REVIEW** (approvers: Solution Architect, QA) |
-| Source | `/URS.md` v1.0 on `dev` (APPROVED). Every requirement here traces to a URS ID. Nothing has been added beyond the URS. |
+| Source | `/URS.md` v1.0 on `dev`, blob `951a849` (APPROVED). Any later change to that blob is a deviation to re-review. Every requirement here traces to a URS ID. Nothing has been added beyond the URS. |
 | Author | PM |
 | Date | 2026-10-01 |
 
@@ -41,6 +41,17 @@ Note on UR-16: discount is a Should, but MTS-07 (100% discount) is mandatory. Di
 - **R7 Pre-rounding total:** Base + SC + SST.
 - **R8 5-sen rounding (if enabled):** round the pre-rounding total to the nearest RM 0.05. Totals ending in .01/.02 go down to .00, .03/.04 go up to .05, .06/.07 go down to .05, and .08/.09 go up to .10. Rounding Adjustment = Grand Total − pre-rounding total, shown as its own signed line (e.g. "Rounding −0.02"). If rounding is disabled, the adjustment is 0.00 [ASSUMPTION A-04 from URS].
 - **R9 Grand Total:** pre-rounding total + Rounding Adjustment. It is never negative.
+
+**Worked examples (defaults: Dine-in SC 10%, SST 6% on Base + SC, rounding on):**
+
+| Ex | Input | SC | SST | Pre-rounding | Rounding | Grand Total |
+|---|---|---|---|---|---|---|
+| W1 | Base RM 12.34 | 1.234 → 1.23 | 13.57 × 6% = 0.8142 → 0.81 | 14.38 | +0.02 | **14.40** |
+| W2 | Base RM 10.05 (half-up test) | 1.005 → 1.01 | 11.06 × 6% = 0.6636 → 0.66 | 11.72 | −0.02 | **11.70** |
+| W3 | Takeaway Base RM 25.00 | 0.00 | 1.50 | 26.50 | 0.00 | **26.50** |
+| W4 | Subtotal RM 40.00, 100% discount | 0.00 | 0.00 | 0.00 | 0.00 | **0.00** |
+
+**Split worked example (A-16):** Dine-in, three people each ordering one RM 10.00 item, so Base is 30.00. SC is 3.00, SST is 33.00 × 6% = 1.98, the pre-rounding total is 34.98 and rounding is +0.02, giving a Grand Total of 35.00. Each person's share of Base is one third, so 35.00 / 3 = 11.666… is rounded down to 11.66 each, which leaves a remainder of 0.02. That goes to sub-bill 1, giving **11.68 / 11.66 / 11.66**, which sums to exactly 35.00. In an equal split, the same remainder rule gives RM 100.00 / 3 = **33.34 / 33.33 / 33.33**.
 
 ### 3.2 Tables and order types
 
