@@ -1,0 +1,3 @@
+$ node tools/check-browsers.js not-a-browser
+Unknown browser: not-a-browser (use chrome or msedge)
+exit=2

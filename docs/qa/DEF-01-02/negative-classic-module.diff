@@ -1,0 +1,12 @@
+diff --git a/spikes/t01/index.html b/spikes/t01/index.html
+index 6359684..9960e0c 100644
+--- a/spikes/t01/index.html
++++ b/spikes/t01/index.html
+@@ -47,6 +47,6 @@
+     <li>Quit the browser completely, then open this file again as <code>index.html?phase=read</code> in the same profile. IndexedDB should still show the sentinel, and this tab holds the lock.</li>
+     <li>Leave that tab open. Open a second tab to <code>index.html?phase=read&amp;role=second</code>. Web Locks passes there only when the callback receives <code>null</code>.</li>
+   </ol>
+-  <script src="spike.js"></script>
++  <script type="module" src="spike.js"></script>
+ </body>
+ </html>

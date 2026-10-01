@@ -1,0 +1,3 @@
+$ node tools/check-browsers.js chrome
+chrome 154.0.8037.57
+exit=0

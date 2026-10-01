@@ -1,0 +1,6 @@
+$ sudo mv /opt/microsoft/msedge /opt/microsoft/msedge.qa-hidden && node tools/check-browsers.js msedge
+msedge missing: browserType.launch: Chromium distribution 'msedge' is not found at /opt/microsoft/msedge/msedge
+Run "npx playwright install msedge"
+exit=1
+msedge 154.0.4258.48
+restored exit=0

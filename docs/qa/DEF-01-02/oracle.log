@@ -1,0 +1,542 @@
+$ node --test tests/qa/oracle.test.js
+TAP version 13
+# SM-03 oracle seed=20261001 handBills=52 handSplits=30 generatedOrders=1000 generatedSplits=350
+# Subtest: SM-03 reference self-check
+    # Subtest: AC-20 totals use the §3 field set
+    ok 1 - AC-20 totals use the §3 field set
+      ---
+      duration_ms: 4.630778
+      ...
+    # Subtest: R6 half-up anchors from W1, W2 and AC-32a
+    ok 2 - R6 half-up anchors from W1, W2 and AC-32a
+      ---
+      duration_ms: 0.249422
+      ...
+    # Subtest: W1 dine-in base RM 12.34 (R4–R9)
+    ok 3 - W1 dine-in base RM 12.34 (R4–R9)
+      ---
+      duration_ms: 0.553946
+      ...
+    # Subtest: W2 dine-in base RM 10.05 half-up (R6)
+    ok 4 - W2 dine-in base RM 10.05 half-up (R6)
+      ---
+      duration_ms: 0.182932
+      ...
+    # Subtest: AC-27/W3/MTS-03 takeaway RM 25.00
+    ok 5 - AC-27/W3/MTS-03 takeaway RM 25.00
+      ---
+      duration_ms: 0.29155
+      ...
+    # Subtest: AC-32/W4/MTS-07 100% bill discount of RM 40.00
+    ok 6 - AC-32/W4/MTS-07 100% bill discount of RM 40.00
+      ---
+      duration_ms: 0.176552
+      ...
+    # Subtest: AC-32/MTS-07 RM 50.00 discount capped at RM 40.00 (R3)
+    ok 7 - AC-32/MTS-07 RM 50.00 discount capped at RM 40.00 (R3)
+      ---
+      duration_ms: 0.400164
+      ...
+    # Subtest: W5 bill RM 10.00 + RM 20.00 + RM 5.00
+    ok 8 - W5 bill RM 10.00 + RM 20.00 + RM 5.00
+      ---
+      duration_ms: 0.193603
+      ...
+    # Subtest: A-16 bill three RM 10.00 lines
+    ok 9 - A-16 bill three RM 10.00 lines
+      ---
+      duration_ms: 0.251997
+      ...
+    # Subtest: AC-21 RM 0.10 + RM 0.20, SC SST and rounding off
+    ok 10 - AC-21 RM 0.10 + RM 0.20, SC SST and rounding off
+      ---
+      duration_ms: 0.250604
+      ...
+    # Subtest: AC-22 dine-in RM 100.00 default SC RM 10.00
+    ok 11 - AC-22 dine-in RM 100.00 default SC RM 10.00
+      ---
+      duration_ms: 0.226752
+      ...
+    # Subtest: AC-22 takeaway RM 100.00 default SC RM 0.00
+    ok 12 - AC-22 takeaway RM 100.00 default SC RM 0.00
+      ---
+      duration_ms: 0.354789
+      ...
+    # Subtest: AC-23 dine-in SC 5% on RM 100.00
+    ok 13 - AC-23 dine-in SC 5% on RM 100.00
+      ---
+      duration_ms: 0.168219
+      ...
+    # Subtest: AC-23 dine-in SC switched off on RM 100.00
+    ok 14 - AC-23 dine-in SC switched off on RM 100.00
+      ---
+      duration_ms: 0.302218
+      ...
+    # Subtest: AC-23 takeaway SC 10% switched on for RM 100.00
+    ok 15 - AC-23 takeaway SC 10% switched on for RM 100.00
+      ---
+      duration_ms: 0.204891
+      ...
+    # Subtest: AC-24/MTS-01 dine-in RM 100.00, SC 10%, SST 6% on base + SC
+    ok 16 - AC-24/MTS-01 dine-in RM 100.00, SC 10%, SST 6% on base + SC
+      ---
+      duration_ms: 0.124329
+      ...
+    # Subtest: AC-25/MTS-02 SST on base only, dine-in RM 100.00
+    ok 17 - AC-25/MTS-02 SST on base only, dine-in RM 100.00
+      ---
+      duration_ms: 0.085575
+      ...
+    # Subtest: AC-26/MTS-11 SST switched off, dine-in RM 100.00
+    ok 18 - AC-26/MTS-11 SST switched off, dine-in RM 100.00
+      ---
+      duration_ms: 0.204737
+      ...
+    # Subtest: AC-28 unpaid bill uses SST 8%
+    ok 19 - AC-28 unpaid bill uses SST 8%
+      ---
+      duration_ms: 0.132597
+      ...
+    # Subtest: AC-32a 10% of RM 12.35 is RM 1.24, base RM 11.11
+    ok 20 - AC-32a 10% of RM 12.35 is RM 1.24, base RM 11.11
+      ---
+      duration_ms: 0.094293
+      ...
+    # Subtest: AC-32a fixed RM 5.00 discount on RM 12.35
+    ok 21 - AC-32a fixed RM 5.00 discount on RM 12.35
+      ---
+      duration_ms: 0.119251
+      ...
+    # Subtest: AC-19 voided RM 5.00 excluded; live line RM 10.00
+    ok 22 - AC-19 voided RM 5.00 excluded; live line RM 10.00
+      ---
+      duration_ms: 0.108722
+      ...
+    # Subtest: AC-36 qty 3 × RM 10.00 stays one line in the subtotal
+    ok 23 - AC-36 qty 3 × RM 10.00 stays one line in the subtotal
+      ---
+      duration_ms: 0.099354
+      ...
+    # Subtest: AC-37/MTS-06 voided RM 20.00 excluded from subtotal
+    ok 24 - AC-37/MTS-06 voided RM 20.00 excluded from subtotal
+      ---
+      duration_ms: 0.099972
+      ...
+    # Subtest: R2 qty 2 × RM 10.00, charges off
+    ok 25 - R2 qty 2 × RM 10.00, charges off
+      ---
+      duration_ms: 0.092587
+      ...
+    # Subtest: R2/AC-33 order with no lines
+    ok 26 - R2/AC-33 order with no lines
+      ---
+      duration_ms: 0.092116
+      ...
+    # Subtest: R2/AC-19/AC-33 every line voided
+    ok 27 - R2/AC-19/AC-33 every line voided
+      ---
+      duration_ms: 0.088298
+      ...
+    # Subtest: R6 5 sen × 10% is half a sen and rounds up
+    ok 28 - R6 5 sen × 10% is half a sen and rounds up
+      ---
+      duration_ms: 0.199801
+      ...
+    # Subtest: R6 4 sen × 10% is 0.4 sen and stays 0
+    ok 29 - R6 4 sen × 10% is 0.4 sen and stays 0
+      ---
+      duration_ms: 0.110571
+      ...
+    # Subtest: R6 15 sen × 10% is 1.5 sen and rounds up
+    ok 30 - R6 15 sen × 10% is 1.5 sen and rounds up
+      ---
+      duration_ms: 0.174025
+      ...
+    # Subtest: R3/R6 50% of RM 10.01 half-up to RM 5.01
+    ok 31 - R3/R6 50% of RM 10.01 half-up to RM 5.01
+      ---
+      duration_ms: 0.092531
+      ...
+    # Subtest: R8 1 sen rounds down to RM 0.00
+    ok 32 - R8 1 sen rounds down to RM 0.00
+      ---
+      duration_ms: 0.192348
+      ...
+    # Subtest: R8 2 sen rounds down to RM 0.00
+    ok 33 - R8 2 sen rounds down to RM 0.00
+      ---
+      duration_ms: 0.088534
+      ...
+    # Subtest: R8 3 sen rounds up to RM 0.05
+    ok 34 - R8 3 sen rounds up to RM 0.05
+      ---
+      duration_ms: 1.513222
+      ...
+    # Subtest: R1 large dine-in RM 123456.78 in integer sen
+    ok 35 - R1 large dine-in RM 123456.78 in integer sen
+      ---
+      duration_ms: 0.337954
+      ...
+    # Subtest: R5 W1 base with SST on base only
+    ok 36 - R5 W1 base with SST on base only
+      ---
+      duration_ms: 0.181909
+      ...
+    # Subtest: R4 SC enabled at 0% is 0
+    ok 37 - R4 SC enabled at 0% is 0
+      ---
+      duration_ms: 0.122385
+      ...
+    # Subtest: R3 RM discount equal to the subtotal
+    ok 38 - R3 RM discount equal to the subtotal
+      ---
+      duration_ms: 0.098139
+      ...
+    # Subtest: R3 0% bill discount leaves the dine-in RM 100.00 bill unchanged
+    ok 39 - R3 0% bill discount leaves the dine-in RM 100.00 bill unchanged
+      ---
+      duration_ms: 0.098088
+      ...
+    # Subtest: R4/R6/R11 SC 10.25% of RM 100.00
+    ok 40 - R4/R6/R11 SC 10.25% of RM 100.00
+      ---
+      duration_ms: 0.121933
+      ...
+    # Subtest: R5 SST enabled at 0% is 0
+    ok 41 - R5 SST enabled at 0% is 0
+      ---
+      duration_ms: 0.346204
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.01
+    ok 42 - AC-29/MTS-04 rounding 10.01
+      ---
+      duration_ms: 0.19158
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.02
+    ok 43 - AC-29/MTS-04 rounding 10.02
+      ---
+      duration_ms: 0.106128
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.03
+    ok 44 - AC-29/MTS-04 rounding 10.03
+      ---
+      duration_ms: 0.091522
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.04
+    ok 45 - AC-29/MTS-04 rounding 10.04
+      ---
+      duration_ms: 0.083398
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.06
+    ok 46 - AC-29/MTS-04 rounding 10.06
+      ---
+      duration_ms: 0.089802
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.07
+    ok 47 - AC-29/MTS-04 rounding 10.07
+      ---
+      duration_ms: 0.089647
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.08
+    ok 48 - AC-29/MTS-04 rounding 10.08
+      ---
+      duration_ms: 0.079383
+      ...
+    # Subtest: AC-29/MTS-04 rounding 10.09
+    ok 49 - AC-29/MTS-04 rounding 10.09
+      ---
+      duration_ms: 0.079423
+      ...
+    # Subtest: AC-30 pre-rounding RM 10.00 rounding line 0.00
+    ok 50 - AC-30 pre-rounding RM 10.00 rounding line 0.00
+      ---
+      duration_ms: 0.077891
+      ...
+    # Subtest: AC-30 pre-rounding RM 10.05 rounding line 0.00
+    ok 51 - AC-30 pre-rounding RM 10.05 rounding line 0.00
+      ---
+      duration_ms: 0.081484
+      ...
+    # Subtest: AC-31 rounding off leaves RM 10.01 unchanged
+    ok 52 - AC-31 rounding off leaves RM 10.01 unchanged
+      ---
+      duration_ms: 0.122331
+      ...
+    # Subtest: AC-31 rounding off leaves RM 10.09 unchanged
+    ok 53 - AC-31 rounding off leaves RM 10.09 unchanged
+      ---
+      duration_ms: 0.081012
+      ...
+    # Subtest: AC-31 rounding off keeps the W2 pre-rounding total RM 11.72
+    ok 54 - AC-31 rounding off keeps the W2 pre-rounding total RM 11.72
+      ---
+      duration_ms: 0.090757
+      ...
+    # Subtest: AC-35/MTS-05 equal RM 100.00 / 3
+    ok 55 - AC-35/MTS-05 equal RM 100.00 / 3
+      ---
+      duration_ms: 0.614001
+      ...
+    # Subtest: A-16 equal RM 35.00 / 3
+    ok 56 - A-16 equal RM 35.00 / 3
+      ---
+      duration_ms: 0.14494
+      ...
+    # Subtest: A-16 by-item three RM 10.00 bases
+    ok 57 - A-16 by-item three RM 10.00 bases
+      ---
+      duration_ms: 0.452526
+      ...
+    # Subtest: W5/AC-38 by-item RM 10 / RM 20 / RM 5
+    ok 58 - W5/AC-38 by-item RM 10 / RM 20 / RM 5
+      ---
+      duration_ms: 0.18835
+      ...
+    # Subtest: AC-38 Σbase 0 yields RM 0.00 sub-bills
+    ok 59 - AC-38 Σbase 0 yields RM 0.00 sub-bills
+      ---
+      duration_ms: 0.123291
+      ...
+    # Subtest: AC-38 Σbase 0 and a nonzero grand still yields RM 0.00
+    ok 60 - AC-38 Σbase 0 and a nonzero grand still yields RM 0.00
+      ---
+      duration_ms: 0.109195
+      ...
+    # Subtest: AC-36 qty 3 line is one base of RM 30.00 beside RM 10.00
+    ok 61 - AC-36 qty 3 line is one base of RM 30.00 beside RM 10.00
+      ---
+      duration_ms: 0.086544
+      ...
+    # Subtest: AC-37 voided line is left out of the bases
+    ok 62 - AC-37 voided line is left out of the bases
+      ---
+      duration_ms: 0.083696
+      ...
+    # Subtest: AC-34/AC-35 equal 1 sen across 2 people
+    ok 63 - AC-34/AC-35 equal 1 sen across 2 people
+      ---
+      duration_ms: 0.078467
+      ...
+    # Subtest: AC-34 equal 101 sen across N=20
+    ok 64 - AC-34 equal 101 sen across N=20
+      ---
+      duration_ms: 0.268032
+      ...
+    # Subtest: AC-38 by-item RM 0.10 across three 1-sen bases
+    ok 65 - AC-38 by-item RM 0.10 across three 1-sen bases
+      ---
+      duration_ms: 0.202205
+      ...
+    # Subtest: AC-34 equal N=2 of RM 100.00
+    ok 66 - AC-34 equal N=2 of RM 100.00
+      ---
+      duration_ms: 0.10569
+      ...
+    # Subtest: AC-34 equal N=3 of RM 100.00
+    ok 67 - AC-34 equal N=3 of RM 100.00
+      ---
+      duration_ms: 0.079282
+      ...
+    # Subtest: AC-34 equal N=4 of RM 100.00
+    ok 68 - AC-34 equal N=4 of RM 100.00
+      ---
+      duration_ms: 0.068044
+      ...
+    # Subtest: AC-34 equal N=5 of RM 100.00
+    ok 69 - AC-34 equal N=5 of RM 100.00
+      ---
+      duration_ms: 0.068167
+      ...
+    # Subtest: AC-34 equal N=6 of RM 100.00
+    ok 70 - AC-34 equal N=6 of RM 100.00
+      ---
+      duration_ms: 0.06882
+      ...
+    # Subtest: AC-34 equal N=7 of RM 100.00
+    ok 71 - AC-34 equal N=7 of RM 100.00
+      ---
+      duration_ms: 0.104288
+      ...
+    # Subtest: AC-34 equal N=8 of RM 100.00
+    ok 72 - AC-34 equal N=8 of RM 100.00
+      ---
+      duration_ms: 0.06671
+      ...
+    # Subtest: AC-34 equal N=9 of RM 100.00
+    ok 73 - AC-34 equal N=9 of RM 100.00
+      ---
+      duration_ms: 0.068999
+      ...
+    # Subtest: AC-34 equal N=10 of RM 100.00
+    ok 74 - AC-34 equal N=10 of RM 100.00
+      ---
+      duration_ms: 0.070188
+      ...
+    # Subtest: AC-34 equal N=11 of RM 100.00
+    ok 75 - AC-34 equal N=11 of RM 100.00
+      ---
+      duration_ms: 0.067872
+      ...
+    # Subtest: AC-34 equal N=12 of RM 100.00
+    ok 76 - AC-34 equal N=12 of RM 100.00
+      ---
+      duration_ms: 0.065384
+      ...
+    # Subtest: AC-34 equal N=13 of RM 100.00
+    ok 77 - AC-34 equal N=13 of RM 100.00
+      ---
+      duration_ms: 0.074133
+      ...
+    # Subtest: AC-34 equal N=14 of RM 100.00
+    ok 78 - AC-34 equal N=14 of RM 100.00
+      ---
+      duration_ms: 0.072236
+      ...
+    # Subtest: AC-34 equal N=15 of RM 100.00
+    ok 79 - AC-34 equal N=15 of RM 100.00
+      ---
+      duration_ms: 0.174821
+      ...
+    # Subtest: AC-34 equal N=16 of RM 100.00
+    ok 80 - AC-34 equal N=16 of RM 100.00
+      ---
+      duration_ms: 0.085148
+      ...
+    # Subtest: AC-34 equal N=17 of RM 100.00
+    ok 81 - AC-34 equal N=17 of RM 100.00
+      ---
+      duration_ms: 0.074821
+      ...
+    # Subtest: AC-34 equal N=18 of RM 100.00
+    ok 82 - AC-34 equal N=18 of RM 100.00
+      ---
+      duration_ms: 0.066848
+      ...
+    # Subtest: AC-34 equal N=19 of RM 100.00
+    ok 83 - AC-34 equal N=19 of RM 100.00
+      ---
+      duration_ms: 0.06604
+      ...
+    # Subtest: AC-34 equal N=20 of RM 100.00
+    ok 84 - AC-34 equal N=20 of RM 100.00
+      ---
+      duration_ms: 0.065405
+      ...
+    # Subtest: generated orders (1000) reference invariants
+    ok 85 - generated orders (1000) reference invariants
+      ---
+      duration_ms: 15.446105
+      ...
+    # Subtest: generated equal splits (190) reference invariants
+    ok 86 - generated equal splits (190) reference invariants
+      ---
+      duration_ms: 1.543466
+      ...
+    # Subtest: generated by-item splits (160) reference invariants
+    ok 87 - generated by-item splits (160) reference invariants
+      ---
+      duration_ms: 2.652759
+      ...
+    # Subtest: PRNG restarts at the same seed
+    ok 88 - PRNG restarts at the same seed
+      ---
+      duration_ms: 1.847111
+      ...
+    1..88
+ok 1 - SM-03 reference self-check
+  ---
+  duration_ms: 44.130512
+  type: 'suite'
+  ...
+# Subtest: SM-03 implementation comparison
+    # Subtest: hand-written bills match js/calc.js computeBill
+    ok 1 - hand-written bills match js/calc.js computeBill
+      ---
+      duration_ms: 2.826387
+      ...
+    # Subtest: hand-written splits match js/calc.js splitEqual and splitByItem
+    ok 2 - hand-written splits match js/calc.js splitEqual and splitByItem
+      ---
+      duration_ms: 1.231301
+      ...
+    # Subtest: generated orders (1000) match js/calc.js computeBill
+    ok 3 - generated orders (1000) match js/calc.js computeBill
+      ---
+      duration_ms: 27.357643
+      ...
+    # Subtest: generated splits (350) match js/calc.js
+    ok 4 - generated splits (350) match js/calc.js
+      ---
+      duration_ms: 6.138495
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = 0
+    ok 5 - R11 splitEqual throws RangeError for n = 0
+      ---
+      duration_ms: 0.707141
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = 1
+    ok 6 - R11 splitEqual throws RangeError for n = 1
+      ---
+      duration_ms: 0.140801
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = 21
+    ok 7 - R11 splitEqual throws RangeError for n = 21
+      ---
+      duration_ms: 0.09786
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = 2.5
+    ok 8 - R11 splitEqual throws RangeError for n = 2.5
+      ---
+      duration_ms: 0.397743
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = -2
+    ok 9 - R11 splitEqual throws RangeError for n = -2
+      ---
+      duration_ms: 0.143549
+      ...
+    # Subtest: R11 splitEqual throws RangeError for n = NaN
+    ok 10 - R11 splitEqual throws RangeError for n = NaN
+      ---
+      duration_ms: 0.081941
+      ...
+    # Subtest: R11 splitByItem throws RangeError for a negative base
+    ok 11 - R11 splitByItem throws RangeError for a negative base
+      ---
+      duration_ms: 0.183378
+      ...
+    # Subtest: R11 computeBill throws RangeError for a negative price
+    ok 12 - R11 computeBill throws RangeError for a negative price
+      ---
+      duration_ms: 0.156563
+      ...
+    # Subtest: R11 computeBill throws RangeError for a negative quantity
+    ok 13 - R11 computeBill throws RangeError for a negative quantity
+      ---
+      duration_ms: 0.165797
+      ...
+    # Subtest: R11 computeBill throws RangeError for a negative rate
+    ok 14 - R11 computeBill throws RangeError for a negative rate
+      ---
+      duration_ms: 0.164468
+      ...
+    # Subtest: R11 computeBill throws RangeError for a negative discount
+    ok 15 - R11 computeBill throws RangeError for a negative discount
+      ---
+      duration_ms: 0.126204
+      ...
+    1..15
+ok 2 - SM-03 implementation comparison
+  ---
+  duration_ms: 40.494773
+  type: 'suite'
+  ...
+1..2
+# tests 103
+# suites 2
+# pass 103
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 312.32091
+exit=0

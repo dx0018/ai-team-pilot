@@ -1,0 +1,7 @@
+$ SPIKE_BROWSERS=chrome npm run spike:t01   (copy with type="module")
+
+> spike:t01
+> node tests/spike/t01.spike.js
+
+{"browser":"chrome","channel":"chrome","version":"","product":"","userAgent":"","isSecureContext":null,"checks":{"classicScript":{"pass":false},"indexedDB":{"pass":false},"webLocks":{"pass":false},"font":{"pass":false}},"offendingRequests":[],"pass":false,"error":"Error: spike did not finish: page.waitForFunction: Timeout 20000ms exceeded.\n    at openSpike (/tmp/neg/tests/spike/t01.spike.js:142:11)\n    at runNextTicks (node:internal/process/task_queues:60:5)\n    at process.processImmediate (node:internal/timers:454:9)\n    at process.callbackTrampoline (node:internal/async_hooks:130:17)\n    at async runBrowser (/tmp/neg/tests/spike/t01.spike.js:237:19)\n    at async main (/tmp/neg/tests/spike/t01.spike.js:285:21)"}
+exit=1

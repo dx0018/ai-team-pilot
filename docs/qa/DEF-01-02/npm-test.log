@@ -1,0 +1,206 @@
+$ npm test
+
+> test
+> node tools/run-tests.js
+
+TAP version 13
+# Subtest: require("./js/calc.js") exports the §3 functions
+ok 1 - require("./js/calc.js") exports the §3 functions
+  ---
+  duration_ms: 1.807812
+  ...
+# Subtest: halfUpDiv matches the PRD half-sen cases
+ok 2 - halfUpDiv matches the PRD half-sen cases
+  ---
+  duration_ms: 0.230437
+  ...
+# Subtest: W1 dine-in base RM 12.34
+ok 3 - W1 dine-in base RM 12.34
+  ---
+  duration_ms: 1.937993
+  ...
+# Subtest: W2 dine-in base RM 10.05 half-up
+ok 4 - W2 dine-in base RM 10.05 half-up
+  ---
+  duration_ms: 0.297993
+  ...
+# Subtest: W3 and AC-27 takeaway RM 25.00, no SC, SST 6%
+ok 5 - W3 and AC-27 takeaway RM 25.00, no SC, SST 6%
+  ---
+  duration_ms: 0.234734
+  ...
+# Subtest: W4 and AC-32 100% discount and RM discount capped at subtotal
+ok 6 - W4 and AC-32 100% discount and RM discount capped at subtotal
+  ---
+  duration_ms: 0.287125
+  ...
+# Subtest: A-16 dine-in three RM 10.00 items
+ok 7 - A-16 dine-in three RM 10.00 items
+  ---
+  duration_ms: 0.148512
+  ...
+# Subtest: W5 dine-in lines RM 10, 20 and 5
+ok 8 - W5 dine-in lines RM 10, 20 and 5
+  ---
+  duration_ms: 0.264674
+  ...
+# Subtest: AC-21 RM 0.10 and RM 0.20 with SC, SST and rounding off
+ok 9 - AC-21 RM 0.10 and RM 0.20 with SC, SST and rounding off
+  ---
+  duration_ms: 0.474479
+  ...
+# Subtest: AC-22 dine-in SC is RM 10.00 and takeaway SC is RM 0.00 on RM 100.00
+ok 10 - AC-22 dine-in SC is RM 10.00 and takeaway SC is RM 0.00 on RM 100.00
+  ---
+  duration_ms: 0.428302
+  ...
+# Subtest: AC-24 MTS-01 dine-in RM 100, SC 10%, SST 6% on base + SC
+ok 11 - AC-24 MTS-01 dine-in RM 100, SC 10%, SST 6% on base + SC
+  ---
+  duration_ms: 0.233242
+  ...
+# Subtest: AC-25 MTS-02 SST on base only
+ok 12 - AC-25 MTS-02 SST on base only
+  ---
+  duration_ms: 0.233341
+  ...
+# Subtest: AC-29 rounding table
+ok 13 - AC-29 rounding table
+  ---
+  duration_ms: 0.538891
+  ...
+# Subtest: AC-30 pre-rounding totals ending in .00 or .05 have a 0.00 rounding line
+ok 14 - AC-30 pre-rounding totals ending in .00 or .05 have a 0.00 rounding line
+  ---
+  duration_ms: 0.358168
+  ...
+# Subtest: AC-31 rounding switched off leaves the pre-rounding total unchanged
+ok 15 - AC-31 rounding switched off leaves the pre-rounding total unchanged
+  ---
+  duration_ms: 0.218389
+  ...
+# Subtest: AC-32a bill discount 10% of RM 12.35 and a fixed RM 5.00
+ok 16 - AC-32a bill discount 10% of RM 12.35 and a fixed RM 5.00
+  ---
+  duration_ms: 0.334694
+  ...
+# Subtest: R2 qty multiplies and voided lines are excluded
+ok 17 - R2 qty multiplies and voided lines are excluded
+  ---
+  duration_ms: 0.201762
+  ...
+# Subtest: AC-35 and equal split of RM 100.00 by 3
+ok 18 - AC-35 and equal split of RM 100.00 by 3
+  ---
+  duration_ms: 0.476626
+  ...
+# Subtest: equal split N = 2..20 sums exactly and puts the remainder on sub-bill 1
+ok 19 - equal split N = 2..20 sums exactly and puts the remainder on sub-bill 1
+  ---
+  duration_ms: 0.407728
+  ...
+# Subtest: A-16 split by item is 11.68 / 11.66 / 11.66
+ok 20 - A-16 split by item is 11.68 / 11.66 / 11.66
+  ---
+  duration_ms: 0.424573
+  ...
+# Subtest: W5 split by item is 11.67 / 23.31 / 5.82
+ok 21 - W5 split by item is 11.67 / 23.31 / 5.82
+  ---
+  duration_ms: 0.233028
+  ...
+# Subtest: AC-37 a voided line is omitted from splitByItem bases
+ok 22 - AC-37 a voided line is omitted from splitByItem bases
+  ---
+  duration_ms: 0.22556
+  ...
+# Subtest: splitByItem with Σbase = 0 is 0.00 on every sub-bill
+ok 23 - splitByItem with Σbase = 0 is 0.00 on every sub-bill
+  ---
+  duration_ms: 1.352806
+  ...
+# Subtest: R11-blocked inputs throw RangeError
+ok 24 - R11-blocked inputs throw RangeError
+  ---
+  duration_ms: 1.525856
+  ...
+# Subtest: zero sen, zero quantity and the split bounds stay valid
+ok 25 - zero sen, zero quantity and the split bounds stay valid
+  ---
+  duration_ms: 0.342761
+  ...
+# Subtest: AC-42 and AC-43 cash change
+ok 26 - AC-42 and AC-43 cash change
+  ---
+  duration_ms: 0.230647
+  ...
+# Subtest: parseMoney accepts sen amounts used by the PRD
+ok 27 - parseMoney accepts sen amounts used by the PRD
+  ---
+  duration_ms: 2.462598
+  ...
+# Subtest: parseMoney rejects negatives, extra decimals and non-numeric text
+ok 28 - parseMoney rejects negatives, extra decimals and non-numeric text
+  ---
+  duration_ms: 0.277222
+  ...
+# Subtest: formatRM and formatSigned match the PRD display
+ok 29 - formatRM and formatSigned match the PRD display
+  ---
+  duration_ms: 0.240003
+  ...
+# Subtest: parseRate accepts 0–100 with at most 2 decimals, including 10.25%
+ok 30 - parseRate accepts 0–100 with at most 2 decimals, including 10.25%
+  ---
+  duration_ms: 0.328202
+  ...
+# Subtest: parseRate rejects out-of-range and non-numeric rates
+ok 31 - parseRate rejects out-of-range and non-numeric rates
+  ---
+  duration_ms: 0.168231
+  ...
+# Subtest: index.html loads classic scripts and local stylesheets
+ok 32 - index.html loads classic scripts and local stylesheets
+  ---
+  duration_ms: 1.521627
+  ...
+# Subtest: R11 table count and names
+ok 33 - R11 table count and names
+  ---
+  duration_ms: 2.714695
+  ...
+# Subtest: R11 menu item price and name
+ok 34 - R11 menu item price and name
+  ---
+  duration_ms: 0.520047
+  ...
+# Subtest: R11 service charge and SST rates
+ok 35 - R11 service charge and SST rates
+  ---
+  duration_ms: 0.478482
+  ...
+# Subtest: R11 split count N
+ok 36 - R11 split count N
+  ---
+  duration_ms: 0.269082
+  ...
+# Subtest: R11 bill discount percent and RM amount
+ok 37 - R11 bill discount percent and RM amount
+  ---
+  duration_ms: 0.391091
+  ...
+# Subtest: R11 cash received is numeric, ≥ 0, with at most 2 decimals
+ok 38 - R11 cash received is numeric, ≥ 0, with at most 2 decimals
+  ---
+  duration_ms: 0.306718
+  ...
+1..38
+# tests 38
+# suites 0
+# pass 38
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 176.418928
+exit=0
