@@ -2,7 +2,7 @@
 
 | Item | Value |
 |---|---|
-| Document | Architecture v1 |
+| Document | Architecture v1.1 (v1 at `da3a194`) |
 | Status | **READY_FOR_REVIEW** (reviewers: IE for buildability, QA for testability) |
 | Input | PRD v0.2 at `9e65c78` (APPROVED by SA), traced to URS blob `951a849` |
 | Author | SA |
@@ -166,7 +166,7 @@ css/   tokens.css  base.css  components.css  screens.css  print.css
 js/    money.js calc.js validate.js domain.js report.js
        store.js clock.js tablock.js router.js app.js
        ui/ tables.js order.js bill.js split.js pay.js receipt.js eod.js settings.js
-config/ menu.js            (default menu, a JSON object, see D-04)
+config/ menu.js            (default menu: fixed wrapper around strict JSON, see AD-04)
 fonts/  NotoSansSC-subset-400.woff2  NotoSansSC-subset-700.woff2  OFL.txt
 images/ (optional menu images)
 tests/  unit/*.test.js     (node:test, zero dependencies)
@@ -185,7 +185,7 @@ All app scripts are classic `<script>` tags in dependency order. Each pure modul
 | AD-01 | Vanilla JS, classic scripts, no build step | React/Vue, or ES modules | NF-01 and NF-07. Chrome blocks ES modules over `file://`, and staff will open `index.html` directly. |
 | AD-02 | Primary run mode is opening `index.html` from disk; a static server also works | Server-only | NF-06. Windows has no built-in static server, so requiring one means installing something. |
 | AD-03 | IndexedDB through a small hand-written wrapper (no library) | localStorage | A-27 capacity (about 7.5 MB at 5,000 bills, above localStorage's limit), and IndexedDB transactions make payment atomic (AC-81). Fallback to localStorage only if the T-01 spike fails. |
-| AD-04 | Default menu shipped as `config/menu.js`: a JSON object assigned to `window.POS_DEFAULT_MENU`. Settings also has Import and Export of a plain `.json` menu file | `fetch('config/menu.json')` | Browsers block `fetch` of local files over `file://`. The payload stays pure JSON, editable in any text editor. **PM/QA: please confirm this reading of AC-09 / UR-07.** |
+| AD-04 | Default menu shipped as `config/menu.js` in a fixed format: line 1 is exactly `window.POS_DEFAULT_MENU =`, then a strict-JSON payload, then a final line `;`. Settings also exports the menu as a plain `.json` file and imports it back | `fetch('config/menu.json')` | Browsers block `fetch` of local files over `file://`. The payload stays strict JSON (QA strips the wrapper and runs `JSON.parse`). Accepted by QA; logged by PM as D-04 for July. |
 | AD-05 | Integer sen and basis points, integer half-up division | Floats with `toFixed`; a decimal library | UR-22 with zero dependencies. The largest product (sen × bp) stays far below 2^53. |
 | AD-06 | Bill number allocated at payment, inside the payment transaction | Allocate when the Bill screen opens | Abandoned or reopened orders never burn numbers, so numbering stays gap-free and never reused (AC-49, AC-81). |
 | AD-07 | Write-through on every mutation | Save on interval or `beforeunload` | MTS-10 / AC-55: a refresh at any moment loses nothing. |
@@ -242,7 +242,7 @@ All app scripts are classic `<script>` tags in dependency order. Each pure modul
 | T-09 | Bill, discount, split and payment screens: full totals block (SST line hidden when off), bill-level discount entry, equal split (N 2–20) and split by item with remainder marked on /1, payment method picker (6 methods), cash received and change, blocked actions per R10, Confirm disabled on first tap. | T-08 | Every listed AC passes in e2e, including MTS-05 to MTS-09 through the UI. | 20, 22, 23, 24, 25, 26, 27, 28, 29, 32, 32a, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 81 |
 | T-10 | Receipt screen and `print.css`: header from `settingsUsed` (SST reg. no. only when SST on), body lines, totals, split breakdown, payment and change, notes, footer; 72 mm column. | T-09 | Print preview and Save as PDF on 80 mm and A4 show no clipped text; Chinese names render (MTS-12); MTS-11 shows no SST line or number. | 13, 17, 26, 39, 46, 47, 48, 49 |
 | T-11 | `report.js` with unit tests, and EOD screen with date picker: totals, breakdown by method and by type, voided items, Voided bills section showing "None". | T-09 | Unit tests reconcile a 20-bill fixture day to the sen (SM-08); breakdowns sum to net sales and bill count; an empty date shows zeros. | 19, 50, 51, 52, 53 |
-| T-12 | Settings screen: restaurant details, tables (count 1–50, rename, remove blocked when in use), menu CRUD and JSON import/export, SC per order type, SST rate, on/off and base, rounding, footer, Reset all data with confirmation. | T-04, T-06 | Every field saves and persists; invalid input is blocked per R10/R11; unpaid orders recompute after a rate change and paid bills don't. | 04, 05, 09, 10, 11, 23, 26, 28, 54, 56 |
+| T-12 | Settings screen: restaurant details, tables (count 1–50, rename, remove blocked when in use), menu CRUD and JSON import/export, SC per order type, SST rate, on/off and base, rounding, footer, Reset all data with confirmation. | T-04, T-06 | Every field saves and persists; invalid input is blocked per R10/R11; unpaid orders recompute after a rate change and paid bills don't; exporting the menu to `.json` and importing it back gives a deep-equal menu; the `config/menu.js` payload passes `JSON.parse` once the wrapper is stripped. | 04, 05, 09, 10, 11, 23, 26, 28, 54, 56 |
 | T-13 | Test support for QA: `tools/make-fixture.js` generating 200 items and 500 bills, the committed fixture, a `data-testid` audit, and Playwright projects for Chrome and Edge. | T-07 to T-12 | QA can seed the fixture, override the clock and drive every Must screen headlessly in both browsers. | 55, 61, 62, 63, 81, 82 (test support) |
 | T-14 | Release assets: the 7 screenshots committed under `docs/screenshots/`, final README (run, print setup, backup warning, single-tab note). | T-07 to T-12 | Screenshots of all 7 screens are present and current; README steps work on a fresh copy. | 57, 65 |
 
@@ -284,10 +284,17 @@ All 71 Must ACs (AC-01 to AC-66b plus AC-07a, AC-32a, AC-81, AC-82) map to at le
 | ID | Risk | Likelihood / Impact | Mitigation |
 |---|---|---|---|
 | RS-01 | IndexedDB, Web Locks or local fonts behave differently on `file://` in Chrome or Edge. | Medium / High | T-01 spike runs first. Fallbacks: localStorage with a capacity warning (AD-03), a storage-flag lock (AD-08). SA revises the design before T-04 if any fail. |
-| RS-02 | AD-04 (`config/menu.js` wrapping JSON) is judged not to satisfy UR-07's "JSON config file". | Medium / Medium | Raised to PM and QA now. Alternative is `menu.json` plus a required static server, which conflicts with AD-02. |
+| RS-02 | July rejects AD-04 (`config/menu.js` wrapping strict JSON) as not meeting UR-07's "JSON config file". | Low / Medium | QA accepted it with testable conditions; D-04 goes to July. Alternative is `menu.json` plus a required static server, which conflicts with AD-02. |
 | RS-03 | Opening the app via `file://` and via a static server gives two separate data stores, so switching methods makes data appear lost. | Medium / Medium | README pins one method (open `index.html`) and explains this. |
 | RS-04 | Browser storage is evicted or cleared. | Low / High | `storage.persist()`, README warning; UR-43 backup is Should (RK-02). |
 | RS-05 | Thermal printer drivers add margins or scale, clipping the 72 mm column. | Medium / Medium | T-10 tests on 80 mm and A4; README covers print settings (margins none, scale 100%). |
 | RS-06 | The font subset misses a character the owner types later. | Medium / Low | System CJK fallback in the font stack (A-26, AC-13). |
 | RS-07 | On `file://`, other local HTML files in the same browser profile can read POS data. | Low / Low | Single counter device; documented in README. |
 | RS-08 | Edge isn't available in the CI or test environment for Playwright. | Medium / Low | QA runs the Edge project on a Windows machine; Chrome runs everywhere. |
+
+## 9. Change log
+
+| Version | Commit | Changes |
+|---|---|---|
+| v1 | `da3a194` | First design. |
+| v1.1 | this commit | AD-04 tightened to a fixed wrapper around strict JSON (QA condition); T-12 done-criteria add the menu JSON round trip and the `JSON.parse` check; RS-02 updated. |
