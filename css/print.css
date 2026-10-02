@@ -1,3 +1,28 @@
 @media print {
   body { background: white; }
+
+  .no-print { display: none !important; }
+
+  .screen { padding: 0; }
+
+  .receipt-sheet {
+    width: 72mm;
+    margin: 0 auto;
+    box-shadow: none;
+    border-radius: 0;
+    color: #000;
+  }
+
+  .receipt-header { text-align: center; }
+
+  .receipt-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .receipt-line span:last-child {
+    text-align: right;
+    white-space: nowrap;
+  }
 }

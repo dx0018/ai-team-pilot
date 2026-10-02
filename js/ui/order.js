@@ -87,6 +87,18 @@
     });
     if (POS.uiState.voidLineId) pane.appendChild(voidDialog(order));
     pane.appendChild(preview(order));
+    var bill = dom.button('btn btn-primary', 'Bill', 'order-bill');
+    bill.addEventListener('click', function () {
+      try {
+        var opened = POS.domain.openBill(order);
+        dom.save(opened).then(function (saved) {
+          POS.navigate('#/bill/' + saved.id);
+        });
+      } catch (err) {
+        dom.showMessage(err.message);
+      }
+    });
+    pane.appendChild(bill);
     return pane;
   }
 

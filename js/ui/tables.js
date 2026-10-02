@@ -10,6 +10,7 @@
     tables.forEach(function (table) {
       var order = dom.orderForTable(table.id);
       var status = dom.statusOf(order);
+      var wrap = dom.el('div', 'table-wrap');
       var card = dom.el('button', 'card table-card');
       card.type = 'button';
       card.setAttribute('data-testid', 'table-' + table.id);
@@ -28,7 +29,19 @@
           location.hash = '#/order/' + saved.id;
         });
       });
-      grid.appendChild(card);
+      wrap.appendChild(card);
+      if (status.key === 'paid' && order) {
+        var reset = dom.button('btn btn-primary', 'Reset', 'table-reset-' + table.id);
+        reset.addEventListener('click', function () {
+          try {
+            dom.save(POS.domain.closeTable(order));
+          } catch (err) {
+            dom.showMessage(err.message);
+          }
+        });
+        wrap.appendChild(reset);
+      }
+      grid.appendChild(wrap);
     });
     body.appendChild(grid);
   }

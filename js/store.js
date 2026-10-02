@@ -561,6 +561,11 @@
     return indexGetAll('voidDates', date);
   }
 
+  function getOrder(id) {
+    var tx = db.transaction('orders', 'readonly');
+    return requestToPromise(tx.objectStore('orders').get(id));
+  }
+
   function deleteOrder(id) {
     var tx = db.transaction('orders', 'readwrite');
     if (consumeFail()) return writeFailed(tx);
@@ -641,6 +646,7 @@
     nextTakeawayNo: nextTakeawayNo,
     deleteOrder: deleteOrder,
     payOrder: payOrder,
+    getOrder: getOrder,
     billsByDate: billsByDate,
     ordersWithVoidsOn: ordersWithVoidsOn,
     resetAll: resetAll,

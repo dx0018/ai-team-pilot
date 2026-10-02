@@ -142,3 +142,45 @@
   .order-layout { grid-template-columns: 1fr; }
   .ticket { position: static; }
 }
+
+.table-wrap { display: flex; flex-direction: column; gap: 8px; }
+
+.table-card { width: 100%; }
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: var(--space);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: var(--space);
+  max-width: 280px;
+}
+
+.receipt-sheet {
+  width: 72mm;
+  max-width: 100%;
+  margin: var(--space) auto;
+}
+
+.receipt-header { text-align: center; }
+
+.receipt-name { font-weight: 700; margin: 0; }
+
+.receipt-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.receipt-line span:last-child { text-align: right; white-space: nowrap; }
+
+.receipt-footer { text-align: center; margin-top: var(--space); }
+
+.remainder { font-size: 0.875rem; }
