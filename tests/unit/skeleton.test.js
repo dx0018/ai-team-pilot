@@ -16,6 +16,7 @@ test('index.html loads classic scripts and local stylesheets', () => {
     'src="js/validate.js"',
     'src="js/clock.js"',
     'src="js/domain.js"',
+    'src="js/report.js"',
     'src="js/store.js"',
     'src="js/tablock.js"',
     'src="js/router.js"',
@@ -26,6 +27,8 @@ test('index.html loads classic scripts and local stylesheets', () => {
     'src="js/ui/split.js"',
     'src="js/ui/pay.js"',
     'src="js/ui/receipt.js"',
+    'src="js/ui/eod.js"',
+    'src="js/ui/settings.js"',
     'src="js/app.js"'
   ];
   let previous = -1;

@@ -14,6 +14,11 @@ button,
   font-weight: 700;
 }
 
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .btn-primary,
 .text-primary {
   background: var(--color-primary);

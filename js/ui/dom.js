@@ -144,7 +144,8 @@
 
   function consumeMessage(testId) {
     if (!POS.uiState.message) return null;
-    var msg = el('p', 'blocked-msg', POS.uiState.message);
+    var saved = POS.uiState.message === 'Saved';
+    var msg = el('p', saved ? 'saved-msg' : 'blocked-msg', POS.uiState.message);
     msg.setAttribute('data-testid', testId || 'blocked-msg-r10');
     POS.uiState.message = '';
     return msg;

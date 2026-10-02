@@ -184,3 +184,26 @@
 .receipt-footer { text-align: center; margin-top: var(--space); }
 
 .remainder { font-size: 0.875rem; }
+
+.check-field {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  margin-top: 8px;
+}
+
+.check-field input { width: 24px; height: 24px; }
+
+.settings-form h2,
+.eod-report h2 { font-size: 1.125rem; margin: var(--space) 0 8px; }
+
+.saved-msg {
+  margin: 0 0 var(--space);
+  padding: 12px;
+  border-radius: var(--radius);
+  background: #e7f4ec;
+  border: 2px solid var(--color-primary);
+}
+
+.eod-report { margin-top: var(--space); }
