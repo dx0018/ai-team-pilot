@@ -33,15 +33,45 @@
     root.textContent = '';
     var screen = el('section', 'screen');
     screen.setAttribute('data-screen', route.name);
-    if (route.name === 'tables') {
-      screen.appendChild(el('h1', null, 'Tables'));
-      var grid = el('div', 'table-grid');
-      grid.setAttribute('data-testid', 'table-grid');
-      screen.appendChild(grid);
-    } else {
-      screen.appendChild(el('h1', null, route.name));
-    }
+    if (POS.ui && POS.ui.bar) screen.appendChild(POS.ui.bar(route.name));
+    var body = el('div', 'screen-body');
+    screen.appendChild(body);
     root.appendChild(screen);
+    var draw = POS.ui && POS.ui[route.name];
+    if (typeof draw === 'function') draw(route, body);
+    else body.appendChild(el('h1', null, route.name));
+  };
+
+  function findOpen(id) {
+    var orders = POS.store.current().openOrders || [];
+    var i;
+    for (i = 0; i < orders.length; i++) {
+      if (orders[i].id === id) return orders[i];
+    }
+    return null;
+  }
+
+  POS.navigate = function (hash) {
+    var current = POS.router.match(location.hash || '#/tables');
+    var orderId = current.name === 'order' ? current.params[0] : null;
+    function go(next) {
+      if ((location.hash || '') === next) POS.render(POS.router.match(next), document.getElementById('app'));
+      else location.hash = next;
+    }
+    if (!orderId || !POS.domain) {
+      go(hash);
+      return Promise.resolve();
+    }
+    var order = findOpen(orderId);
+    if (order && POS.domain.isEmpty(order)) {
+      return POS.store.deleteOrder(order.id).then(function () {
+        go(hash.indexOf('#/order/' + order.id) === 0 ? '#/tables' : hash);
+      }, function () {
+        go('#/tables');
+      });
+    }
+    go(hash);
+    return Promise.resolve();
   };
 
   POS.pay = function (orderId, payment) {
