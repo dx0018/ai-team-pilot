@@ -1,0 +1,65 @@
+$ (copy, mutated calc.js: SST always on base only) node docs/qa/MTS/mts-calc.run.js
+FAIL MTS-01 Dine-in 100.00, SC 10%, SST 6% on base+SC
+  expected {"serviceChargeSen":1000,"sstSen":660,"grandTotalSen":11660}
+  actual   {"serviceChargeSen":1000,"sstSen":600,"grandTotalSen":11600}
+PASS MTS-02 Same, SST on subtotal only
+  expected {"serviceChargeSen":1000,"sstSen":600,"grandTotalSen":11600}
+  actual   {"serviceChargeSen":1000,"sstSen":600,"grandTotalSen":11600}
+PASS MTS-03 Takeaway 25.00, no SC, SST 6%
+  expected {"serviceChargeSen":0,"sstSen":150,"grandTotalSen":2650}
+  actual   {"serviceChargeSen":0,"sstSen":150,"grandTotalSen":2650}
+PASS MTS-04 rounding 10.01
+  expected {"preRoundingSen":1001,"grandTotalSen":1000,"roundingSen":-1}
+  actual   {"preRoundingSen":1001,"grandTotalSen":1000,"roundingSen":-1}
+PASS MTS-04 rounding 10.02
+  expected {"preRoundingSen":1002,"grandTotalSen":1000,"roundingSen":-2}
+  actual   {"preRoundingSen":1002,"grandTotalSen":1000,"roundingSen":-2}
+PASS MTS-04 rounding 10.03
+  expected {"preRoundingSen":1003,"grandTotalSen":1005,"roundingSen":2}
+  actual   {"preRoundingSen":1003,"grandTotalSen":1005,"roundingSen":2}
+PASS MTS-04 rounding 10.04
+  expected {"preRoundingSen":1004,"grandTotalSen":1005,"roundingSen":1}
+  actual   {"preRoundingSen":1004,"grandTotalSen":1005,"roundingSen":1}
+PASS MTS-04 rounding 10.06
+  expected {"preRoundingSen":1006,"grandTotalSen":1005,"roundingSen":-1}
+  actual   {"preRoundingSen":1006,"grandTotalSen":1005,"roundingSen":-1}
+PASS MTS-04 rounding 10.07
+  expected {"preRoundingSen":1007,"grandTotalSen":1005,"roundingSen":-2}
+  actual   {"preRoundingSen":1007,"grandTotalSen":1005,"roundingSen":-2}
+PASS MTS-04 rounding 10.08
+  expected {"preRoundingSen":1008,"grandTotalSen":1010,"roundingSen":2}
+  actual   {"preRoundingSen":1008,"grandTotalSen":1010,"roundingSen":2}
+PASS MTS-04 rounding 10.09
+  expected {"preRoundingSen":1009,"grandTotalSen":1010,"roundingSen":1}
+  actual   {"preRoundingSen":1009,"grandTotalSen":1010,"roundingSen":1}
+PASS MTS-05 Split 100.00 equally by 3
+  expected {"amounts":[3334,3333,3333],"sum":10000}
+  actual   {"amounts":[3334,3333,3333],"sum":10000}
+PASS MTS-06 Voided 15.00 excluded; by-item split of live lines (calc level)
+  expected {"subtotalSen":5000,"amounts":[3000,2000],"sum":5000}
+  actual   {"subtotalSen":5000,"amounts":[3000,2000],"sum":5000}
+PASS MTS-07 100% discount on 40.00
+  expected {"discountSen":4000,"serviceChargeSen":0,"sstSen":0,"grandTotalSen":0,"anyNegative":false}
+  actual   {"discountSen":4000,"serviceChargeSen":0,"sstSen":0,"grandTotalSen":0,"anyNegative":false}
+PASS MTS-07 RM 50.00 discount capped at 40.00
+  expected {"discountSen":4000,"grandTotalSen":0,"anyNegative":false}
+  actual   {"discountSen":4000,"grandTotalSen":0,"anyNegative":false}
+PASS MTS-08 Empty order total 0.00 (calc level; UI block NOT EXECUTED)
+  expected 0
+  actual   0
+PASS MTS-08 All-voided order total 0.00 (calc level)
+  expected 0
+  actual   0
+PASS MTS-09 Cash 110.00 vs due 116.60 rejected (calc level; UI block NOT EXECUTED)
+  expected {"ok":false,"hasReason":true}
+  actual   {"ok":false,"hasReason":true}
+PASS MTS-09 Cash equal to due accepted, change 0.00
+  expected {"ok":true,"changeSen":0}
+  actual   {"ok":true,"changeSen":0}
+PASS MTS-11 SST off: sst 0.00, total 110.00 (calc level; bill/receipt display NOT EXECUTED)
+  expected {"sstSen":0,"grandTotalSen":11000}
+  actual   {"sstSen":0,"grandTotalSen":11000}
+
+SUMMARY pass=19 fail=1
+NOT EXECUTED: MTS-08 UI block, MTS-09 UI block, MTS-10 (refresh mid-order; ordering UI not built), MTS-11 bill/receipt display, MTS-12 (Chinese on receipt; receipt not built).
+exit=1

@@ -1,0 +1,296 @@
+$ npm test
+
+> test
+> node tools/run-tests.js
+
+TAP version 13
+# Subtest: T-04 store seeds, persists, pays once, and dates bills and voids
+ok 1 - T-04 store seeds, persists, pays once, and dates bills and voids
+  ---
+  duration_ms: 1924.240938
+  ...
+# Subtest: window.POS.test is undefined without ?test=1
+ok 2 - window.POS.test is undefined without ?test=1
+  ---
+  duration_ms: 627.536245
+  ...
+# Subtest: a newer IndexedDB version blocks startup and writes nothing
+ok 3 - a newer IndexedDB version blocks startup and writes nothing
+  ---
+  duration_ms: 710.818574
+  ...
+# Subtest: a newer schemaVersion inside v1 blocks startup and does not sweep
+ok 4 - a newer schemaVersion inside v1 blocks startup and does not sweep
+  ---
+  duration_ms: 686.59087
+  ...
+# Subtest: primary token, local font, cards, buttons and greyscale status labels
+ok 5 - primary token, local font, cards, buttons and greyscale status labels
+  ---
+  duration_ms: 1061.208944
+  ...
+# Subtest: AC-64 calc.js and money.js compute W1 in Node with no document or window
+ok 6 - AC-64 calc.js and money.js compute W1 in Node with no document or window
+  ---
+  duration_ms: 8.406334
+  ...
+# Subtest: AC-64 calc.js source does not reference the DOM or browser storage
+ok 7 - AC-64 calc.js source does not reference the DOM or browser storage
+  ---
+  duration_ms: 0.988709
+  ...
+# Subtest: require("./js/calc.js") exports the §3 functions
+ok 8 - require("./js/calc.js") exports the §3 functions
+  ---
+  duration_ms: 1.591564
+  ...
+# Subtest: halfUpDiv matches the PRD half-sen cases
+ok 9 - halfUpDiv matches the PRD half-sen cases
+  ---
+  duration_ms: 0.231493
+  ...
+# Subtest: W1 dine-in base RM 12.34
+ok 10 - W1 dine-in base RM 12.34
+  ---
+  duration_ms: 2.057825
+  ...
+# Subtest: W2 dine-in base RM 10.05 half-up
+ok 11 - W2 dine-in base RM 10.05 half-up
+  ---
+  duration_ms: 0.429565
+  ...
+# Subtest: W3 and AC-27 takeaway RM 25.00, no SC, SST 6%
+ok 12 - W3 and AC-27 takeaway RM 25.00, no SC, SST 6%
+  ---
+  duration_ms: 0.322488
+  ...
+# Subtest: W4 and AC-32 100% discount and RM discount capped at subtotal
+ok 13 - W4 and AC-32 100% discount and RM discount capped at subtotal
+  ---
+  duration_ms: 0.393408
+  ...
+# Subtest: A-16 dine-in three RM 10.00 items
+ok 14 - A-16 dine-in three RM 10.00 items
+  ---
+  duration_ms: 0.212554
+  ...
+# Subtest: W5 dine-in lines RM 10, 20 and 5
+ok 15 - W5 dine-in lines RM 10, 20 and 5
+  ---
+  duration_ms: 0.469808
+  ...
+# Subtest: AC-21 RM 0.10 and RM 0.20 with SC, SST and rounding off
+ok 16 - AC-21 RM 0.10 and RM 0.20 with SC, SST and rounding off
+  ---
+  duration_ms: 0.421749
+  ...
+# Subtest: AC-22 dine-in SC is RM 10.00 and takeaway SC is RM 0.00 on RM 100.00
+ok 17 - AC-22 dine-in SC is RM 10.00 and takeaway SC is RM 0.00 on RM 100.00
+  ---
+  duration_ms: 0.407681
+  ...
+# Subtest: AC-24 MTS-01 dine-in RM 100, SC 10%, SST 6% on base + SC
+ok 18 - AC-24 MTS-01 dine-in RM 100, SC 10%, SST 6% on base + SC
+  ---
+  duration_ms: 0.24254
+  ...
+# Subtest: AC-25 MTS-02 SST on base only
+ok 19 - AC-25 MTS-02 SST on base only
+  ---
+  duration_ms: 0.257132
+  ...
+# Subtest: AC-29 rounding table
+ok 20 - AC-29 rounding table
+  ---
+  duration_ms: 0.58176
+  ...
+# Subtest: AC-30 pre-rounding totals ending in .00 or .05 have a 0.00 rounding line
+ok 21 - AC-30 pre-rounding totals ending in .00 or .05 have a 0.00 rounding line
+  ---
+  duration_ms: 0.314285
+  ...
+# Subtest: AC-31 rounding switched off leaves the pre-rounding total unchanged
+ok 22 - AC-31 rounding switched off leaves the pre-rounding total unchanged
+  ---
+  duration_ms: 0.18993
+  ...
+# Subtest: AC-32a bill discount 10% of RM 12.35 and a fixed RM 5.00
+ok 23 - AC-32a bill discount 10% of RM 12.35 and a fixed RM 5.00
+  ---
+  duration_ms: 0.333048
+  ...
+# Subtest: R2 qty multiplies and voided lines are excluded
+ok 24 - R2 qty multiplies and voided lines are excluded
+  ---
+  duration_ms: 0.255669
+  ...
+# Subtest: AC-35 and equal split of RM 100.00 by 3
+ok 25 - AC-35 and equal split of RM 100.00 by 3
+  ---
+  duration_ms: 0.51705
+  ...
+# Subtest: equal split N = 2..20 sums exactly and puts the remainder on sub-bill 1
+ok 26 - equal split N = 2..20 sums exactly and puts the remainder on sub-bill 1
+  ---
+  duration_ms: 0.377152
+  ...
+# Subtest: A-16 split by item is 11.68 / 11.66 / 11.66
+ok 27 - A-16 split by item is 11.68 / 11.66 / 11.66
+  ---
+  duration_ms: 0.476486
+  ...
+# Subtest: W5 split by item is 11.67 / 23.31 / 5.82
+ok 28 - W5 split by item is 11.67 / 23.31 / 5.82
+  ---
+  duration_ms: 0.313488
+  ...
+# Subtest: AC-37 a voided line is omitted from splitByItem bases
+ok 29 - AC-37 a voided line is omitted from splitByItem bases
+  ---
+  duration_ms: 0.226147
+  ...
+# Subtest: splitByItem with Σbase = 0 is 0.00 on every sub-bill
+ok 30 - splitByItem with Σbase = 0 is 0.00 on every sub-bill
+  ---
+  duration_ms: 0.27529
+  ...
+# Subtest: R11-blocked inputs throw RangeError
+ok 31 - R11-blocked inputs throw RangeError
+  ---
+  duration_ms: 3.250305
+  ...
+# Subtest: zero sen, zero quantity and the split bounds stay valid
+ok 32 - zero sen, zero quantity and the split bounds stay valid
+  ---
+  duration_ms: 0.335616
+  ...
+# Subtest: AC-42 and AC-43 cash change
+ok 33 - AC-42 and AC-43 cash change
+  ---
+  duration_ms: 0.184899
+  ...
+# Subtest: clock.now and businessDate follow the device timezone
+ok 34 - clock.now and businessDate follow the device timezone
+  ---
+  duration_ms: 2.862105
+  ...
+# Subtest: clock.setOverride freezes now and businessDate until cleared
+ok 35 - clock.setOverride freezes now and businessDate until cleared
+  ---
+  duration_ms: 0.348779
+  ...
+# Subtest: clock.businessDate rejects an invalid date
+ok 36 - clock.businessDate rejects an invalid date
+  ---
+  duration_ms: 0.624222
+  ...
+# Subtest: parseMoney accepts sen amounts used by the PRD
+ok 37 - parseMoney accepts sen amounts used by the PRD
+  ---
+  duration_ms: 2.671447
+  ...
+# Subtest: parseMoney rejects negatives, extra decimals and non-numeric text
+ok 38 - parseMoney rejects negatives, extra decimals and non-numeric text
+  ---
+  duration_ms: 0.427079
+  ...
+# Subtest: formatRM and formatSigned match the PRD display
+ok 39 - formatRM and formatSigned match the PRD display
+  ---
+  duration_ms: 0.37494
+  ...
+# Subtest: parseRate accepts 0–100 with at most 2 decimals, including 10.25%
+ok 40 - parseRate accepts 0–100 with at most 2 decimals, including 10.25%
+  ---
+  duration_ms: 0.414337
+  ...
+# Subtest: parseRate rejects out-of-range and non-numeric rates
+ok 41 - parseRate rejects out-of-range and non-numeric rates
+  ---
+  duration_ms: 0.226098
+  ...
+# Subtest: index.html loads classic scripts and local stylesheets
+ok 42 - index.html loads classic scripts and local stylesheets
+  ---
+  duration_ms: 2.490301
+  ...
+# Subtest: default settings seed 20 tables T1–T20 and the built-in rates
+ok 43 - default settings seed 20 tables T1–T20 and the built-in rates
+  ---
+  duration_ms: 2.651453
+  ...
+# Subtest: config/menu.js is a strict JSON payload inside the AD-04 wrapper
+ok 44 - config/menu.js is a strict JSON payload inside the AD-04 wrapper
+  ---
+  duration_ms: 0.499001
+  ...
+# Subtest: bill and takeaway numbers and schema gate
+ok 45 - bill and takeaway numbers and schema gate
+  ---
+  duration_ms: 0.227522
+  ...
+# Subtest: paymentRefusal blocks paid, empty and all-voided orders
+ok 46 - paymentRefusal blocks paid, empty and all-voided orders
+  ---
+  duration_ms: 0.373275
+  ...
+# Subtest: router records route performance marks
+ok 47 - router records route performance marks
+  ---
+  duration_ms: 0.196543
+  ...
+# Subtest: one primary token and one accent token colour every primary element
+ok 48 - one primary token and one accent token colour every primary element
+  ---
+  duration_ms: 2.271168
+  ...
+# Subtest: cards, 44px controls, status text badges and totals typography
+ok 49 - cards, 44px controls, status text badges and totals typography
+  ---
+  duration_ms: 0.817723
+  ...
+# Subtest: bundled Noto Sans SC subset is local and covers Latin plus 3500 han
+ok 50 - bundled Noto Sans SC subset is local and covers Latin plus 3500 han
+  ---
+  duration_ms: 6.29109
+  ...
+# Subtest: R11 table count and names
+ok 51 - R11 table count and names
+  ---
+  duration_ms: 2.810979
+  ...
+# Subtest: R11 menu item price and name
+ok 52 - R11 menu item price and name
+  ---
+  duration_ms: 0.610882
+  ...
+# Subtest: R11 service charge and SST rates
+ok 53 - R11 service charge and SST rates
+  ---
+  duration_ms: 0.632371
+  ...
+# Subtest: R11 split count N
+ok 54 - R11 split count N
+  ---
+  duration_ms: 0.411016
+  ...
+# Subtest: R11 bill discount percent and RM amount
+ok 55 - R11 bill discount percent and RM amount
+  ---
+  duration_ms: 0.553805
+  ...
+# Subtest: R11 cash received is numeric, ≥ 0, with at most 2 decimals
+ok 56 - R11 cash received is numeric, ≥ 0, with at most 2 decimals
+  ---
+  duration_ms: 0.384269
+  ...
+1..56
+# tests 56
+# suites 0
+# pass 56
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4499.647641
+exit=0

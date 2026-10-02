@@ -1,0 +1,37 @@
+$ (copy, channel msedge) node --test tests/e2e/t04.store.test.js tests/e2e/t06.theme.test.js
+TAP version 13
+# Subtest: T-04 store seeds, persists, pays once, and dates bills and voids
+ok 1 - T-04 store seeds, persists, pays once, and dates bills and voids
+  ---
+  duration_ms: 1918.97583
+  ...
+# Subtest: window.POS.test is undefined without ?test=1
+ok 2 - window.POS.test is undefined without ?test=1
+  ---
+  duration_ms: 712.993182
+  ...
+# Subtest: a newer IndexedDB version blocks startup and writes nothing
+ok 3 - a newer IndexedDB version blocks startup and writes nothing
+  ---
+  duration_ms: 835.851974
+  ...
+# Subtest: a newer schemaVersion inside v1 blocks startup and does not sweep
+ok 4 - a newer schemaVersion inside v1 blocks startup and does not sweep
+  ---
+  duration_ms: 788.072414
+  ...
+# Subtest: primary token, local font, cards, buttons and greyscale status labels
+ok 5 - primary token, local font, cards, buttons and greyscale status labels
+  ---
+  duration_ms: 832.380156
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4724.110336
+exit=0
