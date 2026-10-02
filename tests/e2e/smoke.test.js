@@ -15,6 +15,19 @@ function fileUrl(relative) {
 
 const APP = fileUrl('index.html');
 
+function selectedChannels() {
+  const alias = { chrome: 'chrome', 'google-chrome': 'chrome', edge: 'msedge', msedge: 'msedge' };
+  const raw = process.env.POS_BROWSERS || 'chrome,msedge';
+  const out = [];
+  raw.split(/[,\s]+/).filter(Boolean).forEach(function (id) {
+    const channel = alias[id.toLowerCase()];
+    if (!channel) throw new Error('Unknown POS_BROWSERS value: ' + id + ' (use chrome or msedge)');
+    if (out.indexOf(channel) === -1) out.push(channel);
+  });
+  if (!out.length) throw new Error('POS_BROWSERS is empty');
+  return out;
+}
+
 async function idbGet(page, id) {
   return page.evaluate(function (orderId) {
     return new Promise(function (resolve, reject) {
@@ -94,10 +107,8 @@ async function runChannel(channel) {
   }
 }
 
-test('smoke: open, order, split, pay, print, refresh persists in Chrome', { timeout: 120000 }, async function () {
-  await runChannel('chrome');
-});
-
-test('smoke: open, order, split, pay, print, refresh persists in Edge', { timeout: 120000 }, async function () {
-  await runChannel('msedge');
+selectedChannels().forEach(function (channel) {
+  test('smoke: open, order, split, pay, print, refresh persists in ' + channel, { timeout: 120000 }, async function () {
+    await runChannel(channel);
+  });
 });
